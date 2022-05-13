@@ -1,0 +1,49 @@
+{
+  "name": "au_music",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "./",
+  "main": "main.js",
+  "scripts": {
+    "start": "wait-on npm run webpack serve --config ./config/webpack.dev.js && npm run electron . dev",
+    "react:dev": "webpack serve --config ./config/webpack.dev.js",
+    "react:build": "webpack --config ./config/webpack.prod.js",
+    "electron:dev": "electron . dev",
+    "electron": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/react": "^18.0.8",
+    "@types/react-dom": "^18.0.3",
+    "clean-webpack-plugin": "^4.0.0",
+    "concurrently": "^7.1.0",
+    "cross-env": "^7.0.3",
+    "css-loader": "^6.7.1",
+    "html-webpack-plugin": "^5.5.0",
+    "less-loader": "^10.2.0",
+    "node-sass": "^7.0.1",
+    "nodemon": "^2.0.16",
+    "sass-loader": "^12.6.0",
+    "style-loader": "^3.3.1",
+    "ts-loader": "^9.3.0",
+    "typescript": "^4.6.4",
+    "wait-on": "^6.0.1",
+    "webpack": "^5.72.0",
+    "webpack-cli": "^4.9.2",
+    "webpack-dev-server": "^4.9.0",
+    "webpack-merge": "^5.8.0"
+  },
+  "dependencies": {
+    "@reduxjs/toolkit": "^1.8.1",
+    "antd": "^4.20.2",
+    "electron": "^18.2.0",
+    "react": "^18.1.0",
+    "react-dom": "^18.1.0",
+    "react-redux": "^8.0.1",
+    "react-router-dom": "^6.3.0",
+    "redux-thunk": "^2.4.1"
+  }
+}

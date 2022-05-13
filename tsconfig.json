@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "es2016", 
+    "module": "commonjs", 
+    "esModuleInterop": true,
+    "jsx": "react", 
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "baseUrl": "./config",
+    "paths": {
+        "@/*": [
+            "src/*"
+        ]
+    }
+  },
+  "include": [
+    "./src/**/*",
+    "./typings/**/*"
+  ]
+}

@@ -1,0 +1,70 @@
+.App {
+  height: 100vh;
+  width: 100vw;
+  position: relative;
+  // background-image: url("@/assets/images/example.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  // background-color: green;
+  line-height: 1.5em;
+  // font-family: PingFang SC, sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  // color: #000000;
+  // background: #f2e7ca url(images/templatemo_body.jpg) top center no-repeat;
+}
+.container {
+  
+  ::-webkit-scrollbar {
+    display: none;
+  }
+}
+.list-container {
+  position: absolute;
+  // overflow-x: auto;
+  // bottom: 75px;
+  right: 0px;
+  width: 420px;
+  padding: 0 15px;
+  // height: 750px;
+  background-color: red;
+  ::-webkit-scrollbar {
+    display: none;
+  }
+}
+.song-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 30px;
+  line-height: 28px;
+  border: 1px solid black;
+  // display: grid;
+  // grid-template: 1fr / 3fr 2fr 1fr;
+  text-overflow: ellipsis;
+  overflow-x: hidden;
+  white-space: nowrap;
+  .song-name {
+    // width: 150px;
+    flex: 1 0 200px;
+    text-overflow: ellipsis;
+    overflow-x: hidden;
+    white-space: nowrap;
+  }
+  .singer {
+    // width: 150px;
+    flex: 1 0 150px;
+    text-overflow: ellipsis;
+    overflow-x: hidden;
+    white-space: nowrap;
+  }
+  .duration {
+    flex: 0 0 75px;
+    text-overflow: ellipsis;
+    overflow-x: hidden;
+    white-space: nowrap;
+  }
+}
+.list-container-hide {
+  display: none;
+}

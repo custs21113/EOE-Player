@@ -1,22 +1,61 @@
-import React, { useRef, useState } from 'react'
-import Player from './views/Player';
-import Recommend from './views/Recommend/index';
-import { NavLink, Routes, Route } from 'react-router-dom';
-import style from './App.module.less';
+import React, { useEffect, useRef, useState } from 'react'
 import { Drawer } from 'antd';
-import 'antd/dist/antd.css';
+import { useSelector, useDispatch } from 'react-redux';
+import { NavLink, Routes, Route } from 'react-router-dom';
+
+import { initSong } from './states/playerSlice';
+
+import Ranking from './views/Ranking';
+import Player from './views/Player';
+import Recommend from './views/Recommend';
 import Login from './views/Login';
-import { useSelector } from 'react-redux';
-import { initSong } from './states/songSlice';
+
+import 'antd/dist/antd.css';
+import style from './App.module.less';
+import { autoUpdater } from 'electron';
+import Lyric from 'lyric-parser';
 type Props = {}
 
 export default function App({ }: Props) {
+  const dispatch = useDispatch();
   const audioRef: any = useRef<HTMLAudioElement>();
-  const [drawerVisible, updateDrawerVisible] = useState(false);
-  const { songlist } = useSelector((state) => (state as any).songlist);
+  const [drawerVisible, updateDrawerVisible] = useState<boolean>(false);
+  let [ly, updateLy] = useState<Lyric | null>(null)
+  const [currentLyric, updateCurrentLyric] = useState<string>("");
+  const [lines, updateLines] = useState<Array<{ time: number; txt: string }> | undefined>([]);
+  const [line, updateLine] = useState<number>(0);
+  const [songDrawerVisible, updateSongDrawerVisible] = useState<boolean>(false);
+  const player = useSelector((state) => (state as any).player);
+  const { songlist, lyric, id } = player;
   function onDrawerClose() {
     updateDrawerVisible(!drawerVisible);
   };
+  useEffect(() => {
+    function handler({ lineNum, txt }: any) {
+      console.log(lineNum)
+      updateLine(lineNum);
+      updateCurrentLyric(txt);
+    }
+    if (ly !== null) {
+      console.log(currentLyric)
+      ly?.stop();
+    }
+    lyric && updateLy(() => ly = new Lyric(lyric, handler))
+    // l?.play(0)
+    // const ly = new Lyric(lyric, handler);
+    console.log(46,ly);
+    ly?.play(0);
+    // console.log(l?.lines);
+    updateLines(ly?.lines)
+    return () => {
+      // l?.stop();
+    }
+  }, [lyric]);
+  // useEffect(() => {
+  //   document.addEventListener('click', function () {
+  //     updateDrawerVisible(false);
+  //   })
+  // }, [])
   function handleSongClick(index: number) {
     const song = songlist[index];
     const { al, ar, mv, id, dt } = song;
@@ -52,12 +91,17 @@ export default function App({ }: Props) {
         <NavLink to="search" >搜索</NavLink >
         <NavLink to="login" >登录</NavLink >
       </div>
-      <Routes>
-        <Route path='/' element={<Recommend />} />
-        <Route path='/recommend' element={<Recommend />} />
-        <Route path='/login' element={<Login />} />
-        <Route path='/ranking' element={<></>} />
-      </Routes>
+      <div style={{
+        paddingBottom: "75px"
+      }}>
+
+        <Routes>
+          <Route path='/' element={<Recommend />} />
+          <Route path='/recommend' element={<Recommend />} />
+          <Route path='/login' element={<Login />} />
+          <Route path='/ranking' element={<Ranking />} />
+        </Routes>
+      </div>
       <Drawer
         title={"当前播放"}
         placement="right"
@@ -66,10 +110,19 @@ export default function App({ }: Props) {
         visible={drawerVisible}
         getContainer={false}
         width={420}
-        bodyStyle={{ padding: 0, 
-          overflowY: "hidden"}}
-        className={style.container}
-        style={{ position: 'absolute', height: "calc(100% - 75px)",  marginBottom: "75px" }}>
+        // mask={false}
+        zIndex={-1}
+        maskStyle={{
+          backgroundColor: "transparent",
+          zIndex: -1
+        }}
+        bodyStyle={{
+          padding: 0,
+          overflowY: "scroll",
+          height: drawerVisible ? "calc(100% - 75px)" : "0px"
+        }}
+        className={drawerVisible ? style.container : ""}
+        style={{ position: 'absolute', height: drawerVisible ? "calc(100% - 75px)" : "0px", marginBottom: "75px", zIndex: drawerVisible ? 1001 : -1 }}>
         <div className={style['list-container']}>
           {
             songlist.length > 0 && songlist.map((item: any, index: number) => {
@@ -92,11 +145,71 @@ export default function App({ }: Props) {
 
         </div>
       </Drawer>
-      <Player ref={audioRef} {...{ drawerVisible: drawerVisible, updateDrawerVisible: updateDrawerVisible }} />
+      <Drawer
+        placement="bottom"
+        closable={false}
+        onClose={() => {
+          updateSongDrawerVisible(!songDrawerVisible)
+        }}
+        visible={songDrawerVisible}
+        getContainer={false}
+        mask={false}
+        bodyStyle={{
+          padding: 0,
+          overflow: "hidden",
+          height: songDrawerVisible ? "calc(100% - 75px)" : "0px"
+        }} style={{ position: 'absolute', height: songDrawerVisible ? "calc(100% - 75px)" : "0px", marginBottom: "75px", zIndex: songDrawerVisible ? 1000 : -1 }}
+      >
+        <div>
+          <div
+            style={{
+              width: songDrawerVisible ? "980px" : "0px",
+              height: songDrawerVisible ? "775px" : "0px",
+              margin: "auto",
+            }}
+          >
+            <div style={{
+              width: "360px",
+              height: "520px",
+              border: "1px solid black",
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)"
+            }}>
+              <ul style={{
+                overflowY: "hidden",
+                height: "520px",
+              }}>
+                {
+                  lines?.map(({ time, txt }: any, index: React.Key | null | undefined) => {
+                    return (
+                      <li key={index} style={{
+                        fontWeight: line === index ? "bold" : 400
+                      }} onClick={
+                        () => {
+                          ly?.play(time)
+                        }
+                      }>{txt}</li>
+                    )
+                  })
+                }
+              </ul>
+            </div>
+            <button style={{
+              position: "absolute",
+              bottom: 0
+            }}>TEST</button>
+          </div>
+        </div>
+      </Drawer>
+      <div
+      className={style['drawer']}
+      style={{
+        display: drawerVisible ? "none" : "none"
+      }}
+      >TEWT</div>
+      <Player ref={audioRef} {...{ drawerVisible: drawerVisible, updateDrawerVisible: updateDrawerVisible, songDrawerVisible, updateSongDrawerVisible }} />
     </div>
   )
-}
-
-function dispatch(arg0: { payload: any; type: string; }) {
-  throw new Error('Function not implemented.');
 }

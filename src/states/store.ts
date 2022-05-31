@@ -1,9 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit';
-import song from './songSlice';
-import songlist from './songlistSlice';
+import thunkMiddleware from 'redux-thunk';
+import player from './playerSlice';
 export default configureStore({
   reducer: {
-    song, 
-    songlist
+    player
   },
+  // middleware: [thunkMiddleware]
 });

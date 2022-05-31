@@ -5,6 +5,7 @@ const common = require("./webpack.common.js");
 module.exports = merge(common, {
   mode: "development",
   stats: "errors-only",
+  devtool: "cheap-source-map",
   devServer: {
     static: {
       directory: path.resolve(__dirname, "../dist")

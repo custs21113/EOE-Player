@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "homepage": "./",
-  "main": "main.js",
+  "main": "./main.js",
   "scripts": {
     "start": "wait-on npm run webpack serve --config ./config/webpack.dev.js && npm run electron . dev",
     "react:dev": "webpack serve --config ./config/webpack.dev.js",
@@ -16,6 +16,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/lyric-parser": "^1.0.2",
     "@types/react": "^18.0.8",
     "@types/react-dom": "^18.0.3",
     "clean-webpack-plugin": "^4.0.0",
@@ -39,7 +40,11 @@
   "dependencies": {
     "@reduxjs/toolkit": "^1.8.1",
     "antd": "^4.20.2",
+    "axios": "^0.25.0",
     "electron": "^18.2.0",
+    "lyric-parser": "^1.0.1",
+    "proxy-from-env": "^1.1.0",
+    "puppeteer": "^10.2.0",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
     "react-redux": "^8.0.1",

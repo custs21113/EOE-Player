@@ -2,15 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getPersonalized } from "../../api/recommend";
 import getSongList from '../../service/getSongList';
-import { initSonglist } from '../../states/songlistSlice';
-import { initSong } from '../../states/songSlice';
+import { initSonglist, initSong } from '../../states/playerSlice';
 import style from "./index.module.less";
 type Props = {}
 
 function index({ }: Props) {
   const dispatch = useDispatch();
   const [data, updateData] = useState([]);
-  const { songlist } = useSelector((state) => (state as any).songlist);
+  const { songlist } = useSelector((state) => (state as any).player);
   const song = useSelector((state) => (state as any).song);
 
   useEffect(() => {
@@ -18,7 +17,6 @@ function index({ }: Props) {
       const { data } = await getPersonalized();
       const { result } = JSON.parse(data);
       updateData(result);
-      console.log(song);
       return () => {
 
       }

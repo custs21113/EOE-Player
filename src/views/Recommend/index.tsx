@@ -2,14 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getPersonalized } from "../../api/recommend";
 import getSongList from '../../service/getSongList';
-import { initSonglist, initSong } from '../../states/playerSlice';
+import { initSonglist, initSong } from '../../states/playerReducer';
+
 import style from "./index.module.less";
 type Props = {}
 
 function index({ }: Props) {
   const dispatch = useDispatch();
   const [data, updateData] = useState([]);
-  const { songlist } = useSelector((state) => (state as any).player);
+  const { songList } = useSelector((state) => (state as any).player);
   const song = useSelector((state) => (state as any).song);
 
   useEffect(() => {
@@ -25,11 +26,11 @@ function index({ }: Props) {
   }, []);
   const hanleSonglistOnClick = async (id: string) => {
     const { songs } = await getSongList(id);
-    dispatch(initSonglist(songs));
+    // dispatch(initSonglist(songs));
   };
   useEffect(() => {
-    if (songlist.length !== 0) {
-      const song = songlist[0];
+    if (songList.length !== 0) {
+      const song = songList[0];
       const { al, ar, mv, id, dt } = song;
       dispatch(initSong({
         id: id,
@@ -40,7 +41,7 @@ function index({ }: Props) {
         index: 0
       }));
     }
-  }, [songlist])
+  }, [songList])
   return (
     <div className={style['recommend']}>
       <div className={style['song-list-content']}>

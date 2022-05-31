@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import { getPersonalized } from "../../api/recommend";
 import getSongList from '../../service/getSongList';
-import { initSonglist, initSong } from '../../states/playerSlice';
+import { initSongList, initSong } from '../../states/playerSlice';
 import style from "./index.module.less";
 type Props = {}
 
 function index({ }: Props) {
   const dispatch = useDispatch();
   const [data, updateData] = useState([]);
-  const { songlist } = useSelector((state) => (state as any).player);
-  const song = useSelector((state) => (state as any).song);
+  const { songList } = useSelector((state) => (state as any).player);
+  const song = useSelector((state) => (state as any).song, shallowEqual);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -23,13 +23,13 @@ function index({ }: Props) {
     }
     fetchData();
   }, []);
-  const hanleSonglistOnClick = async (id: string) => {
+  const handleSongListOnClick = async (id: string) => {
     const { songs } = await getSongList(id);
-    dispatch(initSonglist(songs));
+    dispatch(initSongList(songs));
   };
   useEffect(() => {
-    if (songlist.length !== 0) {
-      const song = songlist[0];
+    if (songList.length !== 0) {
+      const song = songList[0];
       const { al, ar, mv, id, dt } = song;
       dispatch(initSong({
         id: id,
@@ -40,14 +40,14 @@ function index({ }: Props) {
         index: 0
       }));
     }
-  }, [songlist])
+  }, [songList])
   return (
     <div className={style['recommend']}>
       <div className={style['song-list-content']}>
         {
           data.length > 0 && data.map(({ name, picUrl, playCount, id }, index) => {
             return (
-              <div key={index} className={style['song-list']} onClick={() => hanleSonglistOnClick(id)}>
+              <div key={index} className={style['song-list']} onClick={() => handleSongListOnClick(id)}>
                 <div>
                   <span>{playCount}</span>
                   <img src={picUrl} style={{ width: "140px", height: "140px" }} alt="" />

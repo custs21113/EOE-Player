@@ -1,29 +1,31 @@
-import React, { forwardRef, useEffect, useState } from 'react'
+import React, { forwardRef, useState } from 'react'
 import style from './index.module.less'
-import { useSelector, useDispatch } from 'react-redux';
-import { Slider, Drawer } from 'antd'
+import { useSelector, useDispatch, shallowEqual } from 'react-redux';
+import { Slider } from 'antd'
 import Lyric from 'lyric-parser';
-import { changeLoop, changeVolume, getLyricService, initLyric, initSong, nextSong, prevSong } from '../../states/playerSlice';
-import getLyric from '../../service/getLyric';
-import { AnyAction } from '@reduxjs/toolkit';
+import { changeLoop, changeVolume, nextSong, prevSong, randomPlay } from '../../states/playerSlice';
+import { AppDispatch } from '../../states/store';
+
 
 type Props = {
   drawerVisible: boolean;
   updateDrawerVisible: Function;
   songDrawerVisible: boolean;
   updateSongDrawerVisible: Function;
+  isPlaying: boolean;
+  updateIsPlaying: Function;
+  currentLyric: string;
 }
 
 function index(props: Props, audioRef: any) {
-  const dispatch = useDispatch();
-  const { drawerVisible, updateDrawerVisible, songDrawerVisible, updateSongDrawerVisible } = props;
+  const dispatch = useDispatch<AppDispatch>();
+  const { drawerVisible, updateDrawerVisible, songDrawerVisible, updateSongDrawerVisible, isPlaying, updateIsPlaying, currentLyric } = props;
   const [currentTime, updateCurrentTime] = useState(0);
-  const [isPlaying, updateIsPlaying] = useState(false);
   const [isSeeking, updateIsSeeking] = useState(false);
   let [l, updateL] = useState<Lyric | null>(null)
-  const [currentLyric, updateCurrentLyric] = useState<string>("");
-  const player = useSelector((state) => (state as any).player)
-  const { loop, volume, id, singer, songName, picUrl, dt, lyric } = player;
+  // let [lyric, updateLyric] = useState<string>(currentLyric);
+  const { loop, volume, id, singer, songName, picUrl, dt } = useSelector((state) => (state as any).player, shallowEqual)
+  // const { loop, volume, id, singer, songName, picUrl, dt, lyric } = player;
 
   function timeUpdate(e: any) {
     let currentTime = e.target.currentTime;
@@ -81,6 +83,9 @@ function index(props: Props, audioRef: any) {
         return style.listloop;
     }
   }
+  function randomSong() {
+    dispatch(randomPlay())
+  }
   async function handleAudioEnd() {
     console.log("END")
     switch (loop) {
@@ -89,54 +94,20 @@ function index(props: Props, audioRef: any) {
       case 1:
         return audioRef.current?.play();
       case 2:
-        return await handleNextBtn();
+        return await randomSong();
       default:
         return await handleNextBtn();
     }
   }
-  useEffect(() => {
-    const initPlayer = async () => {
-      if (audioRef.current && id) {
-        audioRef.current.src = `https://music.163.com/song/media/outer/url?id=${id}.mp3`;
-        audioRef.current.preload = "auto";
-        
-        // @ts-ignore
-        dispatch(getLyricService(id));
-        
-        audioRef.current.oncanplay = () => {
-          audioRef.current?.play();
-          audioRef.current.volume = volume / 100;
-          updateIsPlaying(true);
-        }
-      }
-      return () => {
-        l?.stop();
-      }
-    }
-    initPlayer();
-  }, [id]);
-  useEffect(() => {
-    console.log(119, lyric)
-    function handler({ lineNum, txt }: any) {
-      console.log(lineNum, txt)
-      updateCurrentLyric(txt);
-    }
-    if (l !== null) {
-      l.stop();
-    }
 
-    lyric && updateL(() => l = new Lyric(lyric, handler));
-    if (l !== null) {
-      console.log(130)
-      l.play(0);
-    }
-    
-  }, [lyric])
   return (
     <div className={style["player-container"]}>
       <div className={style.player}>
         <div className={style['song-info']}>
-          <img src={picUrl} alt="" className={style['ablumn']} onClick={() => { updateSongDrawerVisible(!songDrawerVisible) }} />
+          <img src={picUrl} alt="" className={style['ablumn']} onClick={(e) => {
+            e.stopPropagation();
+            updateSongDrawerVisible(!songDrawerVisible);
+          }} />
           <div className={style['song']}>
             <div className={style['song-detail']}>
               <div className={style['song-name']}>{songName}</div>
@@ -177,6 +148,7 @@ function index(props: Props, audioRef: any) {
               <div className={style.dislike}></div>
               <div className={parseLoop(loop)} onClick={() => dispatch(changeLoop({ loop }))}></div>
               <div className={style.list} onClick={(e) => {
+                e.stopPropagation();
                 updateDrawerVisible(!drawerVisible);
               }}>
               </div>

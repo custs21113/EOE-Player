@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Drawer } from 'antd';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import { NavLink, Routes, Route } from 'react-router-dom';
 
-import { initSong } from './states/playerSlice';
+import { getLyricService, initSong } from './states/playerSlice';
 
 import Ranking from './views/Ranking';
 import Player from './views/Player';
@@ -12,52 +12,82 @@ import Login from './views/Login';
 
 import 'antd/dist/antd.css';
 import style from './App.module.less';
-import { autoUpdater } from 'electron';
+
 import Lyric from 'lyric-parser';
+import { fetchUserById } from './states/testSlice';
+import { AppDispatch } from './states/store';
+import { durationTrans } from './utils/format';
 type Props = {}
 
 export default function App({ }: Props) {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const audioRef: any = useRef<HTMLAudioElement>();
+  const scrollRef: any = useRef();
   const [drawerVisible, updateDrawerVisible] = useState<boolean>(false);
   let [ly, updateLy] = useState<Lyric | null>(null)
   const [currentLyric, updateCurrentLyric] = useState<string>("");
-  const [lines, updateLines] = useState<Array<{ time: number; txt: string }> | undefined>([]);
+  let [lines, updateLines] = useState<Array<{ time: number; txt: string }> | undefined>([]);
   const [line, updateLine] = useState<number>(0);
   const [songDrawerVisible, updateSongDrawerVisible] = useState<boolean>(false);
-  const player = useSelector((state) => (state as any).player);
-  const { songlist, lyric, id } = player;
+  const [isPlaying, updateIsPlaying] = useState<boolean>(false);
+  const { loop, volume, id, singer, songName, picUrl, dt, lyric, song, songList } = useSelector((state) => (state as any).player, shallowEqual);
+  const { entities, loading } = useSelector((state) => (state as any).test, shallowEqual);
+  const player = useSelector((state) => (state as any).player, shallowEqual);
+
   function onDrawerClose() {
     updateDrawerVisible(!drawerVisible);
   };
+
   useEffect(() => {
-    function handler({ lineNum, txt }: any) {
-      console.log(lineNum)
-      updateLine(lineNum);
-      updateCurrentLyric(txt);
+    const initPlayer = async () => {
+      if (audioRef.current && id) {
+        audioRef.current.src = `https://music.163.com/song/media/outer/url?id=${id}.mp3`;
+        audioRef.current.preload = "auto";
+
+        dispatch(getLyricService(id));
+
+
+        audioRef.current.oncanplay = () => {
+          audioRef.current?.play();
+          audioRef.current.volume = volume / 100;
+          updateIsPlaying(true);
+        }
+      }
+      return () => {
+      }
     }
-    if (ly !== null) {
-      console.log(currentLyric)
-      ly?.stop();
-    }
-    lyric && updateLy(() => ly = new Lyric(lyric, handler))
-    // l?.play(0)
-    // const ly = new Lyric(lyric, handler);
-    console.log(46,ly);
-    ly?.play(0);
-    // console.log(l?.lines);
-    updateLines(ly?.lines)
-    return () => {
-      // l?.stop();
+    initPlayer();
+  }, [id]);
+
+  useEffect(() => {
+    if (lyric !== "") {
+      function handler({ lineNum, txt }: any) {
+        // console.log(lineNum, txt);
+        updateCurrentLyric(txt);
+        updateLine(lineNum)
+        scrollRef.current.scrollTop += 22;
+      }
+      if (ly !== null) {
+        ly.stop();
+      }
+      updateLy(() => {
+        ly = new Lyric(lyric, handler);
+        ly?.play(0)
+        return ly;
+      });
+      updateLines(() => {
+        return lines = ly?.lines
+      })
     }
   }, [lyric]);
-  // useEffect(() => {
-  //   document.addEventListener('click', function () {
-  //     updateDrawerVisible(false);
-  //   })
-  // }, [])
+  useEffect(() => {
+    document.addEventListener('click', function () {
+      updateDrawerVisible(false);
+      // updateSongDrawerVisible(false);
+    })
+  }, [])
   function handleSongClick(index: number) {
-    const song = songlist[index];
+    const song = songList[index];
     const { al, ar, mv, id, dt } = song;
     dispatch(initSong({
       id: id,
@@ -69,20 +99,7 @@ export default function App({ }: Props) {
     }));
     audioRef.current.play();
   };
-  function durationTrans(a: any) {
-    var b = ""
-    var h: number | string = parseInt((a / 3600).toString()),
-      m: number | string = parseInt((a % 3600 / 60).toString()),
-      s: number | string = parseInt((a % 3600 % 60).toString());
-    if (h > 0) {
-      h = h < 10 ? '0' + h : h
-      b += h + ":"
-    }
-    m = m < 10 ? '0' + m : m
-    s = s < 10 ? '0' + s : s
-    b += m + ":" + s
-    return b;
-  }
+
   return (
     <div className={style['App']}>
       <div className={style['nav-bar']}>
@@ -110,22 +127,19 @@ export default function App({ }: Props) {
         visible={drawerVisible}
         getContainer={false}
         width={420}
-        // mask={false}
+        mask={false}
         zIndex={-1}
-        maskStyle={{
-          backgroundColor: "transparent",
-          zIndex: -1
-        }}
         bodyStyle={{
           padding: 0,
           overflowY: "scroll",
           height: drawerVisible ? "calc(100% - 75px)" : "0px"
         }}
+
         className={drawerVisible ? style.container : ""}
         style={{ position: 'absolute', height: drawerVisible ? "calc(100% - 75px)" : "0px", marginBottom: "75px", zIndex: drawerVisible ? 1001 : -1 }}>
         <div className={style['list-container']}>
           {
-            songlist.length > 0 && songlist.map((item: any, index: number) => {
+            songList?.length > 0 && songList.map((item: any, index: number) => {
               const { al, ar, mv, id, dt } = item;
               return (
                 <div key={index} className={style['song-content']} onClick={() => handleSongClick(index)}>
@@ -168,19 +182,17 @@ export default function App({ }: Props) {
               margin: "auto",
             }}
           >
-            <div style={{
+            <div ref={scrollRef} style={{
               width: "360px",
               height: "520px",
               border: "1px solid black",
               position: "absolute",
               top: "50%",
               left: "50%",
-              transform: "translate(-50%, -50%)"
+              transform: "translate(-50%, -50%)",
+              overflow: "auto"
             }}>
-              <ul style={{
-                overflowY: "hidden",
-                height: "520px",
-              }}>
+              <ul>
                 {
                   lines?.map(({ time, txt }: any, index: React.Key | null | undefined) => {
                     return (
@@ -188,7 +200,10 @@ export default function App({ }: Props) {
                         fontWeight: line === index ? "bold" : 400
                       }} onClick={
                         () => {
-                          ly?.play(time)
+                          ly?.play(time);
+                          console.log(time/1000);
+                          audioRef.current.currentTime = time/1000;
+                          // console.log(audioRef.current)
                         }
                       }>{txt}</li>
                     )
@@ -199,17 +214,37 @@ export default function App({ }: Props) {
             <button style={{
               position: "absolute",
               bottom: 0
-            }}>TEST</button>
+            }} onClick={() => {
+              audioRef.current.pause();
+            }}>pause</button>
+            <button style={{
+              position: "absolute",
+              bottom: 0,
+              left: 100
+            }} onClick={() => {
+              audioRef.current.play();
+            }}>play</button>
+            {
+              currentLyric
+            }
+            <div>
+              {...entities}-
+              {loading}<button onClick={
+                () => {
+                  dispatch(fetchUserById(33))
+                }
+              }>
+                PUSH</button></div>
           </div>
         </div>
       </Drawer>
       <div
-      className={style['drawer']}
-      style={{
-        display: drawerVisible ? "none" : "none"
-      }}
-      >TEWT</div>
-      <Player ref={audioRef} {...{ drawerVisible: drawerVisible, updateDrawerVisible: updateDrawerVisible, songDrawerVisible, updateSongDrawerVisible }} />
+        className={style['drawer']}
+        style={{
+          display: drawerVisible ? "none" : "none"
+        }}
+      >TEWTb</div>
+      <Player ref={audioRef} {...{ drawerVisible: drawerVisible, updateDrawerVisible: updateDrawerVisible, songDrawerVisible, updateSongDrawerVisible, isPlaying, updateIsPlaying, currentLyric }} />
     </div>
   )
 }

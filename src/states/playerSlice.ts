@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import Lyric from "lyric-parser";
 import getLyric from "../service/getLyric";
-// import { getSettleSinger } from "../service/singerAndDjradio";
 
 interface InitialStateProps {
   loop: number;
@@ -13,9 +12,10 @@ interface InitialStateProps {
   current: number;
   id: number;
   index: number;
-  songlist: Array<any>;
-  lyric: string|null;
+  songList: Array<any>;
+  lyric: string;
 }
+
 export const initialState: InitialStateProps = {
   loop: 0,
   volume: 30,
@@ -26,17 +26,24 @@ export const initialState: InitialStateProps = {
   current: 0,
   id: 0,
   index: 0,
-  songlist: [],
-  lyric: null,
+  songList: [],
+  lyric: "",
 };
-export const getLyricService = createAsyncThunk("player/getLyricService", async (id: number) => {
-  try {
-    const { data: { lrc: { lyric = "" } } } = await getLyric(id);
-    return lyric;
-  } catch (error) {
-    console.log(error);
+export const getLyricService = createAsyncThunk(
+  "player/getLyricService",
+  async (id: number) => {
+    try {
+      const {
+        data: {
+          lrc: { lyric = "" },
+        },
+      } = await getLyric(id);
+      return lyric;
+    } catch (error) {
+      console.log(error);
+    }
   }
-});
+);
 
 export const playerSlice = createSlice({
   name: "player",
@@ -54,8 +61,8 @@ export const playerSlice = createSlice({
         current: 0,
         id: 0,
         index: 0,
-        songlist: [],
-        lyric: null,
+        songList: [],
+        lyric: "",
       };
       return state;
     },
@@ -73,10 +80,10 @@ export const playerSlice = createSlice({
       };
       return state;
     },
-    initSonglist: (state, action) => {
+    initSongList: (state, action) => {
       state = {
         ...state,
-        songlist: action.payload,
+        songList: action.payload,
       };
       return state;
     },
@@ -85,8 +92,8 @@ export const playerSlice = createSlice({
 
       state = {
         ...state,
-        lyric: lyric
-      }
+        lyric: lyric,
+      };
       return state;
     },
     changeVolume: (state, action) => {
@@ -107,10 +114,10 @@ export const playerSlice = createSlice({
       return state;
     },
     nextSong: (state: InitialStateProps) => {
-      const { index, songlist } = state;
-      if (songlist.length !== 0) {
-        const currentIndex = (index + 1) % songlist.length;
-        const { al, ar, mv, id, dt } = songlist[currentIndex];
+      const { index, songList } = state;
+      if (songList.length !== 0) {
+        const currentIndex = (index + 1) % songList.length;
+        const { al, ar, mv, id, dt } = songList[currentIndex];
         state = {
           ...state,
           id: id,
@@ -126,10 +133,29 @@ export const playerSlice = createSlice({
       }
     },
     prevSong: (state) => {
-      const { index, songlist } = state;
-      if (songlist.length !== 0) {
-        const currentIndex = (index + songlist.length - 1) % songlist.length;
-        const { al, ar, mv, id, dt } = songlist[currentIndex];
+      const { index, songList } = state;
+      if (songList.length !== 0) {
+        const currentIndex = (index + songList.length - 1) % songList.length;
+        const { al, ar, mv, id, dt } = songList[currentIndex];
+        state = {
+          ...state,
+          id: id,
+          dt: dt,
+          singer: ar.map((item: any) => item.name).join("/"),
+          songName: al.name,
+          picUrl: al.picUrl,
+          index: currentIndex,
+        };
+        return state;
+      } else {
+        return state;
+      }
+    },
+    randomPlay: (state) => {
+      const { index, songList } = state;
+      if (songList.length !== 0) {
+        const currentIndex = Math.floor(Math.random() * songList.length);
+        const { al, ar, mv, id, dt } = songList[currentIndex];
         state = {
           ...state,
           id: id,
@@ -146,21 +172,22 @@ export const playerSlice = createSlice({
     },
   },
   extraReducers(builder) {
-    builder
-    .addCase(getLyricService.fulfilled, (state, action) => {
+    builder.addCase(getLyricService.fulfilled, (state, action) => {
       state = {
         ...state,
-        lyric: action.payload
+        lyric: action.payload,
       };
       return state;
-    })
-  }
+    });
+  },
   // extraReducers: {
   //   [getLyricService.fulfilled.toString()]: (state: InitialStateProps, action: any) => {
-  //       state.lyric = action?.payload?.lyric;
+  //       console.log(action)
+  //       state.lyric = action?.payload;
   //       return state;
   //   },
   //   [getLyricService.rejected.toString()]: (state: InitialStateProps, action: any) => {
+  //     console.log(action)
   //       state.lyric = ""
   //       return state;
   //   }
@@ -171,11 +198,12 @@ export const {
   clearPlayer,
   initPlayer,
   initSong,
-  initSonglist,
+  initSongList,
   changeVolume,
   changeLoop,
   prevSong,
   nextSong,
+  randomPlay,
   initLyric,
 } = playerSlice.actions;
 export default playerSlice.reducer;

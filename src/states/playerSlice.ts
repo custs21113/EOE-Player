@@ -73,6 +73,15 @@ export const playerSlice = createSlice({
       };
       return state;
     },
+    addSongToPlayList: (state, action) => {
+      const { songList } = state;
+      state = {
+        ...state,
+        index: songList.length,
+        ...action.payload,
+      };
+      return state;
+    },
     initPlayer: (state, action) => {
       state = {
         ...state,
@@ -117,13 +126,13 @@ export const playerSlice = createSlice({
       const { index, songList } = state;
       if (songList.length !== 0) {
         const currentIndex = (index + 1) % songList.length;
-        const { al, ar, mv, id, dt } = songList[currentIndex];
+        const { name, al, ar, mv, id, dt } = songList[currentIndex];
         state = {
           ...state,
           id: id,
           dt: dt,
           singer: ar.map((item: any) => item.name).join("/"),
-          songName: al.name,
+          songName: name,
           picUrl: al.picUrl,
           index: currentIndex,
         };
@@ -136,13 +145,13 @@ export const playerSlice = createSlice({
       const { index, songList } = state;
       if (songList.length !== 0) {
         const currentIndex = (index + songList.length - 1) % songList.length;
-        const { al, ar, mv, id, dt } = songList[currentIndex];
+        const { name, al, ar, mv, id, dt } = songList[currentIndex];
         state = {
           ...state,
           id: id,
           dt: dt,
           singer: ar.map((item: any) => item.name).join("/"),
-          songName: al.name,
+          songName: name,
           picUrl: al.picUrl,
           index: currentIndex,
         };
@@ -155,13 +164,13 @@ export const playerSlice = createSlice({
       const { index, songList } = state;
       if (songList.length !== 0) {
         const currentIndex = Math.floor(Math.random() * songList.length);
-        const { al, ar, mv, id, dt } = songList[currentIndex];
+        const { name, al, ar, mv, id, dt } = songList[currentIndex];
         state = {
           ...state,
           id: id,
           dt: dt,
           singer: ar.map((item: any) => item.name).join("/"),
-          songName: al.name,
+          songName: name,
           picUrl: al.picUrl,
           index: currentIndex,
         };
@@ -205,5 +214,6 @@ export const {
   nextSong,
   randomPlay,
   initLyric,
+  addSongToPlayList,
 } = playerSlice.actions;
 export default playerSlice.reducer;

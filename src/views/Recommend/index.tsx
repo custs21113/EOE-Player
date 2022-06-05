@@ -23,19 +23,19 @@ function index({ }: Props) {
     }
     fetchData();
   }, []);
-  const handleSongListOnClick = async (id: string) => {
+  const handleSongListOnClick = async (id: number) => {
     const { songs } = await getSongList(id);
     dispatch(initSongList(songs));
   };
   useEffect(() => {
     if (songList.length !== 0) {
       const song = songList[0];
-      const { al, ar, mv, id, dt } = song;
+      const { name, al, ar, mv, id, dt } = song;
       dispatch(initSong({
         id: id,
         dt: dt,
         singer: ar.map((item: any) => item.name).join("/"),
-        songName: al.name,
+        songName: name,
         picUrl: al.picUrl,
         index: 0
       }));

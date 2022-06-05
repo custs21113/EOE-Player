@@ -1,6 +1,7 @@
 const path = require("path");
 const HTMLWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const { DefinePlugin } = require('webpack')
 // const loader = require("ts-loader/dist");    
 
 module.exports = {
@@ -17,6 +18,7 @@ module.exports = {
     extensions: [".ts", ".tsx", ".js", "jsx"],
     mainFiles: ["index.ts", "index.js", "index.tsx", "index.jsx"]
   },
+  target: 'web',
   module: {
     rules: [
       {
@@ -51,6 +53,9 @@ module.exports = {
       template: path.resolve(__dirname, "../public/index.html"),
       filename: "index.html",
       title: "au-music"
+    }),
+    new DefinePlugin({
+      NODE_ENV: JSON.stringify(process.env.NODE_ENV),
     })
   ]
 }

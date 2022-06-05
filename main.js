@@ -1,17 +1,25 @@
 // 引入electron并创建一个Browserwindow
-const { app, BrowserWindow } = require('electron')
+const { app, BrowserWindow, Menu, Tray, ipcMain } = require('electron')
 const path = require('path')
 const url = require('url')
-
 
 // 获取在 package.json 中的命令脚本传入的参数，来判断是开发还是生产环境
 const mode = process.argv[2];
 
 
 // 保持window对象的全局引用,避免JavaScript对象被垃圾回收时,窗口被自动关闭.
-let mainWindow
+let mainWindow;
+let tray = null;
+ipcMain.on('window-minimize', function () {
+    mainWindow.minimize();
+})
 
-
+ipcMain.on('window-enlarge', function () {
+    mainWindow.maximize();
+})
+ipcMain.on('window-close', function () {
+    mainWindow.quit();
+})
 function createWindow() {
     //创建浏览器窗口,宽高自定义
     mainWindow = new BrowserWindow({
@@ -21,26 +29,44 @@ function createWindow() {
         frame: false,
         // transparent: true,
         webPreferences: {
-            devTools: false,
+            devTools: true,
             nodeIntegration: true,
-            enablemotemodule: true
+            enablemotemodule: true,
+            contextIsolation: false,
+            webSecurity: false,
+            allowRunningInsecureContent: true,
+            preload: path.join(__dirname, './public/preload.js')
         }
-    })
+    });
+    tray = new Tray(path.join(__dirname, './public/icon.png'));
+    tray.setToolTip('Electron Tray');
+    const contextMenu = Menu.buildFromTemplate([
+        {
+            label: '显示',
+            click: () => mainWindow.show()
+        },
+        {
+            label: '退出',
+            click: () => mainWindow.quit()
+        }
+    ]);
+    tray.setContextMenu(contextMenu);
     if (mode === 'dev') {
         // 加载应用----适用于 react 项目
         mainWindow.loadURL('http://localhost:3001/');
     } else {
         // 加载应用-----react项目打包后的路径
-        mainWindow.loadURL(url.format({
-            pathname: path.join(__dirname, './public/index.html'),
-            protocol: 'file:',
-            slashes: true
-        }))
+        // mainWindow.loadURL(url.format({
+        //     pathname: path.join(__dirname, './dist/index.html'),
+        //     protocol: 'file:',
+        //     slashes: true
+        // }))
+        mainWindow.loadFile(path.join(__dirname, './dist/index.html'))
     }
 
 
     // 打开开发者工具，默认不打开
-    // mainWindow.webContents.openDevTools()
+    mainWindow.webContents.openDevTools()
     // 关闭window时触发下列事件.
     mainWindow.on('closed', function () {
         mainWindow = null

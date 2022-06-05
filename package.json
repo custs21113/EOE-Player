@@ -6,8 +6,8 @@
   "main": "./main.js",
   "scripts": {
     "start": "wait-on npm run webpack serve --config ./config/webpack.dev.js && npm run electron . dev",
-    "react:dev": "webpack serve --config ./config/webpack.dev.js",
-    "react:build": "webpack --config ./config/webpack.prod.js",
+    "react:dev": "cross-env NODE_ENV=development webpack  serve --config ./config/webpack.dev.js",
+    "react:build": "cross-env NODE_ENV=production webpack --config ./config/webpack.prod.js",
     "electron:dev": "electron . dev",
     "electron": "electron .",
     "test": "echo \"Error: no test specified\" && exit 1"

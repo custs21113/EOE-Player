@@ -1,13 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Drawer } from 'antd';
+import { Drawer, message } from 'antd';
 import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import { NavLink, Routes, Route } from 'react-router-dom';
-
 import { getLyricService, initSong } from './states/playerSlice';
 
 import Ranking from './views/Ranking';
 import Player from './views/Player';
 import Recommend from './views/Recommend';
+import Search from './views/Search';
 import Login from './views/Login';
 
 import 'antd/dist/antd.css';
@@ -18,6 +18,18 @@ import { fetchUserById } from './states/testSlice';
 import { AppDispatch } from './states/store';
 import { durationTrans } from './utils/format';
 type Props = {}
+let ipcRenderer: any = null;
+// @ts-ignore
+const electron = window.electron;
+ipcRenderer = electron.ipcRenderer;
+// if (NODE_ENV === 'production') {
+//   // @ts-ignore
+//   const electron = window.electron;
+//   ipcRenderer = electron.ipcRenderer;
+// } else {
+//   // @ts-ignore
+//   ipcRenderer = null;
+// }
 
 export default function App({ }: Props) {
   const dispatch = useDispatch<AppDispatch>();
@@ -37,7 +49,16 @@ export default function App({ }: Props) {
   function onDrawerClose() {
     updateDrawerVisible(!drawerVisible);
   };
-
+  // console.log('ipc', ipcRenderer)
+  function minimize() {
+    // ipcRenderer?.send('window-minimize');
+  }
+  function maximize() {
+    // ipcRenderer?.send('window-maximize');
+  }
+  function close() {
+    // ipcRenderer?.send('window-close');
+  }
   useEffect(() => {
     const initPlayer = async () => {
       if (audioRef.current && id) {
@@ -65,7 +86,11 @@ export default function App({ }: Props) {
         // console.log(lineNum, txt);
         updateCurrentLyric(txt);
         updateLine(lineNum)
-        scrollRef.current.scrollTop += 22;
+        console.log(scrollRef.current.clientHeight)
+        if (lineNum * 22 >= scrollRef.current.clientHeight / 2) {
+          scrollRef.current.scrollTop += 22;
+
+        }
       }
       if (ly !== null) {
         ly.stop();
@@ -100,13 +125,22 @@ export default function App({ }: Props) {
     audioRef.current.play();
   };
 
+
   return (
     <div className={style['App']}>
-      <div className={style['nav-bar']}>
-        <NavLink to="recommend" >推荐</NavLink >
-        <NavLink to="ranking" >排行</NavLink >
-        <NavLink to="search" >搜索</NavLink >
-        <NavLink to="login" >登录</NavLink >
+      <div className={style['header']}>
+        <div style={{ color: "white" }}>ICON</div>
+        <div className={style['nav-bar']}>
+          <NavLink to="recommend" >推荐</NavLink >
+          <NavLink to="ranking" >排行</NavLink >
+          <NavLink to="search" >搜索</NavLink >
+          <NavLink to="login" >登录</NavLink >
+        </div>
+        <div className={style['window-control']}>
+          <div className={style['minimize']} onClick={minimize}></div>
+          <div className={style['enlarge']} onClick={maximize}></div>
+          <div className={style['close']} onClick={close}></div>
+        </div>
       </div>
       <div style={{
         paddingBottom: "75px"
@@ -115,8 +149,9 @@ export default function App({ }: Props) {
         <Routes>
           <Route path='/' element={<Recommend />} />
           <Route path='/recommend' element={<Recommend />} />
-          <Route path='/login' element={<Login />} />
           <Route path='/ranking' element={<Ranking />} />
+          <Route path='/search' element={<Search />} />
+          <Route path='/login' element={<Login />} />
         </Routes>
       </div>
       <Drawer
@@ -136,7 +171,7 @@ export default function App({ }: Props) {
         }}
 
         className={drawerVisible ? style.container : ""}
-        style={{ position: 'absolute', height: drawerVisible ? "calc(100% - 75px)" : "0px", marginBottom: "75px", zIndex: drawerVisible ? 1001 : -1 }}>
+        style={{ position: 'absolute', height: drawerVisible ? "calc(100% - 125px)" : "0px", marginTop: "50px", marginBottom: "75px", zIndex: drawerVisible ? 1001 : -1 }}>
         <div className={style['list-container']}>
           {
             songList?.length > 0 && songList.map((item: any, index: number) => {
@@ -197,12 +232,12 @@ export default function App({ }: Props) {
                   lines?.map(({ time, txt }: any, index: React.Key | null | undefined) => {
                     return (
                       <li key={index} style={{
-                        fontWeight: line === index ? "bold" : 400
+                        fontWeight: line === index && songDrawerVisible ? "bold" : 400
                       }} onClick={
                         () => {
                           ly?.play(time);
-                          console.log(time/1000);
-                          audioRef.current.currentTime = time/1000;
+                          console.log(time / 1000);
+                          audioRef.current.currentTime = time / 1000;
                           // console.log(audioRef.current)
                         }
                       }>{txt}</li>

@@ -1,0 +1,54 @@
+.recommend {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #05121C;
+  position: relative;
+  bottom: 0px;
+  .song-list-content {
+    display: grid;
+    grid-template: repeat(2, 180px) / repeat(5, 140px);
+    grid-gap: 10px;
+    .song-list {
+      display: flex;
+      flex-direction: column;
+      width: 140px;
+      div {
+        position: relative;
+        width: 140px;
+        height: 140px;
+        // filter: drop-shadow(1px 1px 15px rgba(0, 0, 0, .5));
+        border-radius: 10px;
+        img {
+          border-radius: 10px;
+        }
+        span {
+          position: absolute;
+          right: 5px;
+          top: 5px;
+          color: #c5c5c5;
+        }
+      }
+      div:hover {
+        cursor: pointer;
+      }
+      span {
+        color: white;
+        overflow: hidden;
+        font-size: 14px;
+        text-overflow: ellipsis;
+        /* 设置为弹性伸缩盒子模型 */
+        display: -webkit-box;
+        /* 限制在一个块元素显示的文本的行数, 最多显示3行 */
+        -webkit-line-clamp: 2;
+        /* 设置伸缩盒子的子元素的排列方式*/
+        -webkit-box-orient: vertical;
+        /* 英文字符文本间的单词断行 */
+        word-break: break-all;
+      }
+      span:hover {
+        cursor: pointer;
+      }
+    }
+  }
+}

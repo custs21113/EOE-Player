@@ -19,15 +19,15 @@ import { AppDispatch } from './states/store';
 import { durationTrans } from './utils/format';
 type Props = {}
 let ipcRenderer: any = null;
-// @ts-ignore
-if (NODE_ENV === 'production') {
-  // @ts-ignore
-  const electron = window.electron;
-  ipcRenderer = electron.ipcRenderer;
-} else {
-  // @ts-ignore
-  ipcRenderer = null;
-}
+// // @ts-ignore
+// if (NODE_ENV === 'production') {
+//   // @ts-ignore
+//   const electron = window.electron;
+//   ipcRenderer = electron.ipcRenderer;
+// } else {
+//   // @ts-ignore
+//   ipcRenderer = null;
+// }
 
 export default function App({ }: Props) {
   const dispatch = useDispatch<AppDispatch>();

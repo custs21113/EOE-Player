@@ -5,7 +5,10 @@ const url = require('url')
 
 // 获取在 package.json 中的命令脚本传入的参数，来判断是开发还是生产环境
 const mode = process.argv[2];
-
+function isDev() {
+    // 👉 还记得我们配置中通过 webpack.DefinePlugin 定义的构建变量吗
+    return process.env.NODE_ENV === 'development';
+  }
 // 保持window对象的全局引用,避免JavaScript对象被垃圾回收时,窗口被自动关闭.
 let mainWindow;
 let tray = null;
@@ -33,7 +36,7 @@ function createWindow() {
             enablemotemodule: true,
             contextIsolation: false,
             webSecurity: false,
-            preload: path.join(__dirname, './public/preload.js')
+            // preload: path.join(__dirname, './public/preload.js')
         }
     });
     // tray = new Tray(path.join(__dirname, './public/icon.png'));
@@ -49,9 +52,9 @@ function createWindow() {
         }
     ]);
     // tray.setContextMenu(contextMenu);
-    if (mode === 'dev') {
+    if (isDev()) {
         // 加载应用----适用于 react 项目
-        mainWindow.loadURL('http://localhost:3001/');
+        mainWindow.loadURL('http://localhost:7001/');
     } else {
         // 加载应用-----react项目打包后的路径
         // mainWindow.loadURL(url.format({
@@ -59,7 +62,8 @@ function createWindow() {
         //     protocol: 'file:',
         //     slashes: true
         // }))
-        mainWindow.loadFile(path.join(__dirname, './dist/index.html'))
+        mainWindow.loadURL(`file://${path.join(__dirname, '../dist/index.html')}`);
+        // mainWindow.loadFile(path.join(__dirname, './dist/index.html'))
         // mainWindow.loadURL(`file://${path.join(__dirname, '../dist/index.html')}`);
         // console.log(`file://${path.join(__dirname, '../dist/index.html')}`)
     }

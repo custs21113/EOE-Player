@@ -1,0 +1,206 @@
+.player-container {
+  width: 100%;
+  height: 75px;
+  position: fixed;
+  z-index: 1000;
+  bottom: 0px;
+  left: 0px;
+  background-color: #021524;
+  .player {
+    color: white;
+    position: fixed;
+    width: 980px;
+    height: 75px;
+    bottom: 0px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 0 20px;
+    justify-content: space-between;
+    align-items: center;
+    display: flex;
+    background-color: #021524;
+    .song-info {
+      display: flex;
+      width: 200px;
+      justify-content: flex-start;
+      align-items: center;
+      .ablumn {
+        width: 60px;
+        height: 60px;
+      }
+      .ablumn:hover {
+        cursor: pointer;
+      }
+      .song {
+        margin-left: 10px;
+        .song-detail {
+          display: flex;
+          .song-name {
+          }
+        }
+        .song-singer {
+          width: 100px;
+          font-size: 12px;
+          text-overflow: ellipsis;
+          overflow-x: hidden;
+          white-space: nowrap;
+        }
+      }
+    }
+    .progress-bar-content {
+      width: 600px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+  
+      .lyric {
+        height: 40%;
+      }
+      .progress-bar {
+        height: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        .slider {
+          width: 80%;
+        }
+      }
+    }
+    .control-container {
+      position: relative;
+      width: 200px;
+      height: 100%;
+      display: flex;
+      padding: 15px 0px;
+      flex-direction: column;
+      justify-content: space-between;
+      .control {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        .play-control {
+          display: flex;
+          width: 96px;
+          justify-content: space-around;
+          align-items: center;
+          .prev {
+            width: 24px;
+            height: 24px;
+            background-image: url("@/assets/icons/player-skip-back.svg");
+            background-repeat: no-repeat;
+            background-size: cover;
+          }
+          .prev:hover {
+            cursor: pointer;
+          }
+          .play {
+            width: 24px;
+            height: 24px;
+            background-image: url("@/assets/icons/player-play.svg");
+            background-repeat: no-repeat;
+            background-size: cover;
+          }
+          .play:hover {
+            cursor: pointer;
+          }
+          .pause {
+            width: 24px;
+            height: 24px;
+            background-image: url("@/assets/icons/Pause.svg");
+            background-repeat: no-repeat;
+            background-size: cover;
+          }
+          .pause:hover {
+            cursor: pointer;
+          }
+          .next {
+            width: 24px;
+            height: 24px;
+            background-image: url("@/assets/icons/player-skip-forward.svg");
+            background-repeat: no-repeat;
+            background-size: cover;
+          }
+          .next:hover {
+            cursor: pointer;
+          }
+        }
+        .other-control {
+          display: flex;
+          width: 96px;
+          justify-content: space-around;
+          align-items: center;
+          .like {
+            width: 24px;
+            height: 24px;
+            background-image: url("@/assets/icons/like_1.svg");
+            background-repeat: no-repeat;
+            background-size: cover;
+          }
+          .like:hover {
+            cursor: pointer;
+          }
+          .dislike {
+            width: 24px;
+            height: 24px;
+            background-image: url("@/assets/icons/like.svg");
+            background-repeat: no-repeat;
+            background-size: cover;
+          }
+          .dislike:hover {
+            cursor: pointer;
+          }
+          .single {
+            width: 24px;
+            height: 24px;
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-image: url("@/assets/icons/danquxunhuan.svg");
+          }
+          .single:hover {
+            cursor: pointer;
+          }
+          .random {
+            width: 24px;
+            height: 24px;
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-image: url("@/assets/icons/luanxu.svg");
+          }
+          .random:hover {
+            cursor: pointer;
+          }
+          .listloop {
+            width: 24px;
+            height: 24px;
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-image: url("@/assets/icons/listloop.svg");
+          }
+          .listloop:hover {
+            cursor: pointer;
+          }
+          .list {
+            width: 24px;
+            height: 24px;
+            background-image: url("@/assets/icons/play-list-2-line.svg");
+            background-repeat: no-repeat;
+            background-size: cover;
+          }
+          .list:hover {
+            cursor: pointer;
+          }
+        }
+      }
+      .volume-control {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        .volume {
+          width: 50%;
+        }
+      }
+    }
+  }
+  
+}

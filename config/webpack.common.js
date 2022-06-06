@@ -18,14 +18,13 @@ module.exports = {
     extensions: [".ts", ".tsx", ".js", "jsx"],
     mainFiles: ["index.ts", "index.js", "index.tsx", "index.jsx"]
   },
-  target: 'web',
   module: {
     rules: [
       {
         test: /\.(js|jsx|ts|tsx)$/,
         exclude: /node_modules/,
         use: {
-          loader: 'ts-loader',
+          loader: 'babel-loader',
         }
       },
       {

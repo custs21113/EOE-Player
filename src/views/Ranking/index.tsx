@@ -1,4 +1,4 @@
-import { Divider } from 'antd'
+import { Divider, Skeleton, Spin } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { shallowEqual, useDispatch, useSelector } from 'react-redux'
 import getPlaylist from '../../service/getPlaylist'
@@ -12,15 +12,19 @@ type Props = {}
 const Ranking = (props: Props) => {
   const dispatch = useDispatch<AppDispatch>();
   const [globalRankList, updateGlobalRankList]: [any[], Function] = useState([]);
-  const [officialRankList, updateOfficialRankList]: [any[], Function] = useState([]);
+  // const [officialRankList, updateOfficialRankList]: [any[], Function] = useState([]);
+  const [officialRankListData, updateOfficialRankListData]: [any[], Function] = useState([]);
 
   const { songList } = useSelector((state) => (state as any).player, shallowEqual);
   useEffect(() => {
     const playlist = async () => {
       const { data } = await getPlaylist();
-      // const { result } = JSON.parse(data);
       updateGlobalRankList(data.list.filter((item: any) => !item.ToplistType));
-      updateOfficialRankList(data.list.filter((item: any) => item.ToplistType));
+      const promiseArray = data.list.filter((item: any) => item.ToplistType).map(async ({ id, name, coverImgUrl }: any) => {
+        const { songs } = await getSongList(id, 5);
+        return { songs, name, coverImgUrl };
+      });
+      updateOfficialRankListData(await Promise.all(promiseArray));
       return () => {
 
       }
@@ -48,13 +52,15 @@ const Ranking = (props: Props) => {
   return (
     <div className={style.rankingPage}>
       <div>官方榜</div>
-      {
-        officialRankList.map((item: any, index: number) => {
-          return (
-            <RankTop5 rankList={item} key={index} />
-          )
-        })
-      }
+      <div>
+        {
+          officialRankListData.map((item: any, index: number) => {
+            return (
+              <RankTop5 {...item} key={index} />
+            )
+          })
+        }
+      </div>
       <div>全球榜</div>
       <div className={style.globalRankListContainer}>
         {

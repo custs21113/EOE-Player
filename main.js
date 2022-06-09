@@ -2,23 +2,17 @@
 const { app, BrowserWindow, Menu, Tray, ipcMain } = require('electron')
 const path = require('path')
 const url = require('url')
-
+const mainApi = require('./mainApi')
+// const makeApi = require('./mainApi')
+// const getPersonalized = require('./mainApi/getPersonalized.js');
+// const { ipcMain } = require('electron')
 // 获取在 package.json 中的命令脚本传入的参数，来判断是开发还是生产环境
 const mode = process.argv[2];
 
 // 保持window对象的全局引用,避免JavaScript对象被垃圾回收时,窗口被自动关闭.
 let mainWindow;
 let tray = null;
-ipcMain.on('window-minimize', function () {
-    mainWindow.minimize();
-})
 
-ipcMain.on('window-enlarge', function () {
-    mainWindow.maximize();
-})
-ipcMain.on('window-close', function () {
-    mainWindow.quit();
-})
 function createWindow() {
     //创建浏览器窗口,宽高自定义
     mainWindow = new BrowserWindow({
@@ -32,8 +26,7 @@ function createWindow() {
             nodeIntegration: true,
             enablemotemodule: true,
             contextIsolation: false,
-            webSecurity: false,
-            preload: path.join(__dirname, './public/preload.js')
+            preload: path.join(__dirname, 'preload.js')
         }
     });
     // tray = new Tray(path.join(__dirname, './public/icon.png'));
@@ -49,7 +42,7 @@ function createWindow() {
         }
     ]);
     // tray.setContextMenu(contextMenu);
-    if (mode === 'dev') {
+    if (process.env.NODE_ENV === 'development') {
         // 加载应用----适用于 react 项目
         mainWindow.loadURL('http://localhost:3001/');
     } else {
@@ -59,7 +52,7 @@ function createWindow() {
         //     protocol: 'file:',
         //     slashes: true
         // }))
-        mainWindow.loadFile(path.join(__dirname, './dist/index.html'))
+        mainWindow.loadFile(path.join(__dirname, 'index.html'))
         // mainWindow.loadURL(`file://${path.join(__dirname, '../dist/index.html')}`);
         // console.log(`file://${path.join(__dirname, '../dist/index.html')}`)
     }
@@ -71,11 +64,16 @@ function createWindow() {
     mainWindow.on('closed', function () {
         mainWindow = null
     })
+    return mainWindow;
 }
 
 
 // 当 Electron 完成初始化并准备创建浏览器窗口时调用此方法
-app.on('ready', createWindow)
+app.on('ready', () => {
+    // console.log(typeof mainApi)
+    const e = createWindow()
+    mainApi(e)
+})
 // 所有窗口关闭时退出应用.
 app.on('window-all-closed', function () {
     // macOS中除非用户按下 `Cmd + Q` 显式退出,否则应用与菜单栏始终处于活动状态.

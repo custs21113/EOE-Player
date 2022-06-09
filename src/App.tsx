@@ -1,33 +1,19 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Drawer, message } from 'antd';
+import { Drawer } from 'antd';
+import Lyric from 'lyric-parser';
 import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import { NavLink, Routes, Route } from 'react-router-dom';
+
+import { Ranking, Player, Recommend, Search, Login } from './views'
+import { AppDispatch } from './states/store';
+import { fetchUserById } from './states/testSlice';
 import { getLyricService, initSong } from './states/playerSlice';
 
-import Ranking from './views/Ranking';
-import Player from './views/Player';
-import Recommend from './views/Recommend';
-import Search from './views/Search';
-import Login from './views/Login';
-
-import 'antd/dist/antd.css';
+import { durationTrans } from './utils/format';
+import { ipcRenderer } from './utils/bridge';
 import style from './App.module.less';
 
-import Lyric from 'lyric-parser';
-import { fetchUserById } from './states/testSlice';
-import { AppDispatch } from './states/store';
-import { durationTrans } from './utils/format';
 type Props = {}
-let ipcRenderer: any = null;
-// @ts-ignore
-if (NODE_ENV === 'production') {
-  // @ts-ignore
-  const electron = window.electron;
-  ipcRenderer = electron.ipcRenderer;
-} else {
-  // @ts-ignore
-  ipcRenderer = null;
-}
 
 export default function App({ }: Props) {
   const dispatch = useDispatch<AppDispatch>();
@@ -40,22 +26,20 @@ export default function App({ }: Props) {
   const [line, updateLine] = useState<number>(0);
   const [songDrawerVisible, updateSongDrawerVisible] = useState<boolean>(false);
   const [isPlaying, updateIsPlaying] = useState<boolean>(false);
-  const { loop, volume, id, singer, songName, picUrl, dt, lyric, song, songList } = useSelector((state) => (state as any).player, shallowEqual);
-  const { entities, loading } = useSelector((state) => (state as any).test, shallowEqual);
-  const player = useSelector((state) => (state as any).player, shallowEqual);
+  const { volume, id, lyric, songList } = useSelector((state) => (state as any).player, shallowEqual);
 
   function onDrawerClose() {
     updateDrawerVisible(!drawerVisible);
   };
-  // console.log('ipc', ipcRenderer)
+
   function minimize() {
-    // ipcRenderer?.send('window-minimize');
+    ipcRenderer?.send('window-minimize');
   }
   function maximize() {
-    // ipcRenderer?.send('window-maximize');
+    ipcRenderer?.send('window-maximize');
   }
   function close() {
-    // ipcRenderer?.send('window-close');
+    ipcRenderer?.send('window-close');
   }
   useEffect(() => {
     const initPlayer = async () => {

@@ -3,26 +3,18 @@ import getSongList from '../../../../service/getSongList';
 import style from "./index.module.less";
 
 type Props = {
-  rankList: any;
+  songs: any[];
+  name: string;
+  coverImgUrl: any;
 }
 const RankTop5 = (props: Props) => {
-  const { rankList } = props;
-  const [songList, updateSongList] = useState([]);
-  useEffect(() => {
-    async function updateRankList(id: number) {
-        const { songs } = await getSongList(id, 5);
-        updateSongList(songs);
-      }
-    if (rankList?.id !== 0) {
-      updateRankList(rankList?.id);
-    }
-  }, [])
+  const { songs, name, coverImgUrl } = props;
   return (
     <div className={style.rankTop5}>
-      <img className={style.rankCover} src={`${rankList?.coverImgUrl}?param=${170}x${170}`} title={rankList?.name} alt={rankList?.name} />  
+      <img className={style.rankCover} src={`${coverImgUrl}?param=${170}x${170}`} title={ name} alt={name} />  
       <div className={style.songContainer}>
         {
-          songList.length > 0 && songList?.map(({ name, id, ar }: any, index: number) => {
+          songs.length > 0 && songs?.map(({ name, id, ar }: any, index: number) => {
             return (
               <div key={id} className={style.songItem}>
                 <div className={style.index}>{index+1}</div>

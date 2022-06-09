@@ -8,14 +8,13 @@ type Props = {}
 
 function index({ }: Props) {
   const dispatch = useDispatch();
-  const [data, updateData] = useState([]);
+  let [data, updateData] = useState([]);
   const { songList } = useSelector((state) => (state as any).player);
-  const song = useSelector((state) => (state as any).song, shallowEqual);
 
   useEffect(() => {
     const fetchData = async () => {
-      const { data } = await getPersonalized();
-      const { result } = JSON.parse(data);
+      const { result } = await getPersonalized();
+      console.log(result);
       updateData(result);
       return () => {
 

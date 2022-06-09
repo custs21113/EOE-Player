@@ -23,7 +23,7 @@ const Index = (props: Props, audioRef: any) => {
   return (
     <div className={style.searchPage}>
       search
-      <Input prefix={prefix} type="text" style={{ width: 200 }} ref={keywordRef} onKeyDown={(e) => {
+      <Input prefix={prefix} type="text" style={{ width: "100%" }} ref={keywordRef} onKeyDown={(e) => {
         if (e.key === 'Enter') {
           updateKeyword(keywordRef.current?.input?.value ? keywordRef.current?.input?.value : "")
         }

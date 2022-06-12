@@ -5,6 +5,7 @@ import { Slider } from 'antd'
 import Lyric from 'lyric-parser';
 import { changeLoop, changeVolume, nextSong, prevSong, randomPlay } from '../../states/playerSlice';
 import { AppDispatch } from '../../states/store';
+import { durationTrans } from '../../utils/format';
 
 
 type Props = {
@@ -31,20 +32,7 @@ function index(props: Props, audioRef: any) {
     let currentTime = e.target.currentTime;
     !isSeeking && updateCurrentTime(currentTime);
   }
-  function durationTrans(a: any) {
-    var b = ""
-    var h: number | string = parseInt((a / 3600).toString()),
-      m: number | string = parseInt((a % 3600 / 60).toString()),
-      s: number | string = parseInt((a % 3600 % 60).toString());
-    if (h > 0) {
-      h = h < 10 ? '0' + h : h
-      b += h + ":"
-    }
-    m = m < 10 ? '0' + m : m
-    s = s < 10 ? '0' + s : s
-    b += m + ":" + s
-    return b;
-  }
+
   function handlePrevBtn() {
     dispatch(prevSong())
   }

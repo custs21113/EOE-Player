@@ -3,6 +3,7 @@ import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import { getPersonalized } from "../../api/recommend";
 import getSongList from '../../service/getSongList';
 import { initSongList, initSong } from '../../states/playerSlice';
+import { parsePlayCount } from '../../utils/format';
 import style from "./index.module.less";
 type Props = {}
 
@@ -13,7 +14,7 @@ function index({ }: Props) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const { result } = await getPersonalized();
+      const { result } = await getPersonalized(30);
       console.log(result);
       updateData(result);
       return () => {
@@ -48,7 +49,7 @@ function index({ }: Props) {
             return (
               <div key={index} className={style['song-list']} onClick={() => handleSongListOnClick(id)}>
                 <div>
-                  <span>{playCount}</span>
+                  <span>{parsePlayCount(playCount)}</span>
                   <img src={picUrl} style={{ width: "140px", height: "140px" }} alt="" />
                 </div>
                 <span>

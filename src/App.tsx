@@ -116,7 +116,7 @@ export default function App({ }: Props) {
           <NavLink to="recommend" >推荐</NavLink >
           <NavLink to="ranking" >排行</NavLink >
           <NavLink to="search" >搜索</NavLink >
-          <NavLink to="login" >登录</NavLink >
+          {/* <NavLink to="login" >登录</NavLink > */}
         </div>
         <div className={style['window-control']}>
           <div className={style['minimize']} onClick={minimize}></div>

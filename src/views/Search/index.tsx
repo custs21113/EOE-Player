@@ -19,32 +19,33 @@ type Props = {}
 const Index = (props: Props, audioRef: any) => {
   const keywordRef = useRef<InputRef | null>(null);
   const [keyword, updateKeyword] = useState<string>("");
-  
+
   return (
     <div className={style.searchPage}>
-      search
-      <Input prefix={prefix} type="text" style={{ width: "100%" }} ref={keywordRef} onKeyDown={(e) => {
-        if (e.key === 'Enter') {
-          updateKeyword(keywordRef.current?.input?.value ? keywordRef.current?.input?.value : "")
-        }
-      }} />
-      <Tabs defaultActiveKey="1" style={{
-        color: "white",
-        cursor: "default"
-      }}>
-        <TabPane tab="歌曲" key={SearchType.SingleSong}>
-          <SearchSingleSong keyword={keyword}/>
-        </TabPane>
-        <TabPane tab="专辑" key={SearchType.Album}>
-          <SearchAlbum keyword={keyword} />
-        </TabPane>
-        <TabPane tab="歌手" key={SearchType.Artist}>
-          <SearchArtist keyword={keyword} />
-        </TabPane>
-        <TabPane tab="歌单" key={SearchType.PlayList}>
-          <SearchPlaylist keyword={keyword} />
-        </TabPane>
-      </Tabs>
+      <div className={style.searchContent}>
+        <Input prefix={prefix} type="text" style={{ width: "100%" }} ref={keywordRef} onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            updateKeyword(keywordRef.current?.input?.value ? keywordRef.current?.input?.value : "")
+          }
+        }} />
+        <Tabs defaultActiveKey="1" style={{
+          color: "white",
+          cursor: "default"
+        }}>
+          <TabPane tab="歌曲" key={SearchType.SingleSong}>
+            <SearchSingleSong keyword={keyword} />
+          </TabPane>
+          <TabPane tab="专辑" key={SearchType.Album}>
+            <SearchAlbum keyword={keyword} />
+          </TabPane>
+          <TabPane tab="歌手" key={SearchType.Artist}>
+            <SearchArtist keyword={keyword} />
+          </TabPane>
+          <TabPane tab="歌单" key={SearchType.PlayList}>
+            <SearchPlaylist keyword={keyword} />
+          </TabPane>
+        </Tabs>
+      </div>
     </div>
   )
 }

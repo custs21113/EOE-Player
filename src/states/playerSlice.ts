@@ -77,8 +77,9 @@ export const playerSlice = createSlice({
       const { songList } = state;
       state = {
         ...state,
-        index: songList.length,
         ...action.payload,
+        index: songList.length,
+        songList: [...songList, action.payload]
       };
       return state;
     },

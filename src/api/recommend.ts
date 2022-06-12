@@ -2,10 +2,10 @@ import { ipcRenderer } from "../utils/bridge";
 import request from "../utils/request";
 
 // import { ipcRenderer } from '../utils/bridge';
-async function getPersonalized(): Promise<any> {
+async function getPersonalized(num: number = 10): Promise<any> {
   // return ipcRenderer.invoke('getPersonalized')
   if(process.env.NODE_ENV === "development") {
-    const { data } = await request(`/personalized?limit=10`);
+    const { data } = await request(`/personalized?limit=${num}`);
     return data;
   } else {
     return await ipcRenderer.invoke('getPersonalized')

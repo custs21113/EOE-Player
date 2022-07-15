@@ -125,7 +125,8 @@ export default function App({ }: Props) {
         </div>
       </div>
       <div style={{
-        paddingBottom: "75px"
+        paddingBottom: "75px",
+        backgroundColor: "black"
       }}>
 
         <Routes>

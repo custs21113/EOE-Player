@@ -18,7 +18,7 @@ type Props = {
   currentLyric: string;
 }
 
-function index(props: Props, audioRef: any) {
+function index(props: Props, audioRef: React.Ref<HTMLAudioElement> | any): JSX.Element {
   const dispatch = useDispatch<AppDispatch>();
   const { drawerVisible, updateDrawerVisible, songDrawerVisible, updateSongDrawerVisible, isPlaying, updateIsPlaying, currentLyric } = props;
   const [currentTime, updateCurrentTime] = useState(0);

@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { account } from '../../api/user';
 import { Button, Modal, Skeleton } from 'antd';
+import CountItem from './components/CountItem';
 type Props = {}
 const info = () => {
   Modal.info({
@@ -81,7 +82,8 @@ function index({ }: Props) {
         <Button onClick={() => {
           updateModalVisible(!modalVisible)
         }}>Info</Button>
-        <Skeleton.Image />
+        {/* <Skeleton.Image /> */}
+        <CountItem />
       </div>
     </div>
   )

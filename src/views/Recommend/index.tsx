@@ -3,20 +3,24 @@ import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import { getPersonalized } from "../../api/recommend";
 import getSongList from '../../service/getSongList';
 import { initSongList, initSong } from '../../states/playerSlice';
+import { initRecommendList } from '../../states/rankingSlice';
 import { parsePlayCount } from '../../utils/format';
 import style from "./index.module.less";
 type Props = {}
 
 function index({ }: Props) {
   const dispatch = useDispatch();
-  let [data, updateData] = useState([]);
+  // let [data, updateData] = useState([]);
   const { songList } = useSelector((state) => (state as any).player);
+  const { recommendList } = useSelector((state) => (state as any).ranking, shallowEqual);
 
   useEffect(() => {
     const fetchData = async () => {
+      if (recommendList.length > 0) return;
       const { result } = await getPersonalized(30);
       console.log(result);
-      updateData(result);
+      // updateData(result);
+      dispatch(initRecommendList(result));
       return () => {
 
       }
@@ -45,7 +49,7 @@ function index({ }: Props) {
     <div className={style['recommend']}>
       <div className={style['song-list-content']}>
         {
-          data.length > 0 && data.map(({ name, picUrl, playCount, id }, index) => {
+          recommendList.length > 0 && recommendList.map(({ name, picUrl, playCount, id }: any, index: React.Key) => {
             return (
               <div key={index} className={style['song-list']} onClick={() => handleSongListOnClick(id)}>
                 <div>
@@ -55,7 +59,8 @@ function index({ }: Props) {
                 <span>
                   {
                     name
-                  }</span>
+                  }
+                </span>
               </div>
             )
           })

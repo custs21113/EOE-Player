@@ -27,13 +27,43 @@
   "build": {
     "appId": "au-music.ElectronReact",
     "productName": "au-music",
-    "asar":false,
+    "asar": true,
     "copyright": "Copyright © 2019 ${author}",
     "files": [
       "dist/**/*",
       "package.json",
       "node_modules/"
-    ]
+    ],
+    "directories": {
+      "buildResources": "assets",
+      "output": "distAssets"
+    },
+    "mac": {
+      "target": [
+        "dmg",
+        "zip"
+      ]
+    },
+    "dmg": {
+      "contents": [
+        {
+          "x": 130,
+          "y": 220
+        },
+        {
+          "x": 410,
+          "y": 220,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    },
+    "win": {
+      "target": [
+        "nsis",
+        "msi"
+      ]
+    }
   },
   "devDependencies": {
     "@babel/cli": "^7.17.10",

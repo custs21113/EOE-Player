@@ -46,10 +46,7 @@ export default function App({ }: Props) {
       if (audioRef.current && id) {
         audioRef.current.src = `https://music.163.com/song/media/outer/url?id=${id}.mp3`;
         audioRef.current.preload = "auto";
-
         dispatch(getLyricService(id));
-
-
         audioRef.current.oncanplay = () => {
           audioRef.current?.play();
           audioRef.current.volume = volume / 100;
@@ -60,7 +57,23 @@ export default function App({ }: Props) {
       }
     }
     initPlayer();
+    console.log("APP_SONGID:", id);
   }, [id]);
+
+  useEffect(() => {
+    if (songList.length !== 0) {
+      const song = songList[0];
+      const { name, al, ar, mv, id, dt } = song;
+      dispatch(initSong({
+        id: id,
+        dt: dt,
+        singer: ar.map((item: any) => item.name).join("/"),
+        songName: name,
+        picUrl: al.picUrl,
+        index: 0
+      }));
+    }
+  }, [songList])
 
   useEffect(() => {
     if (lyric !== "") {
@@ -126,7 +139,6 @@ export default function App({ }: Props) {
       </div>
       <div style={{
         paddingBottom: "75px",
-        backgroundColor: "black"
       }}>
 
         <Routes>
@@ -154,7 +166,7 @@ export default function App({ }: Props) {
         }}
 
         className={drawerVisible ? style.container : ""}
-        style={{ position: 'absolute', height: drawerVisible ? "calc(100% - 125px)" : "0px", marginTop: "50px", marginBottom: "75px", zIndex: drawerVisible ? 1001 : -1 }}>
+        style={{ position: 'absolute', height: drawerVisible ? "calc(100% - 125px)" : "0px", marginBottom: "75px", zIndex: drawerVisible ? 1001 : -1 }}>
         <div className={style['list-container']}>
           {
             songList?.length > 0 && songList.map((item: any, index: number) => {

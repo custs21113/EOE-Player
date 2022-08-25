@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import * as _ from 'lodash';
 import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import { getPersonalized } from "../../api/recommend";
 import getSongList from '../../service/getSongList';
@@ -8,22 +9,26 @@ import { parsePlayCount } from '../../utils/format';
 import style from "./index.module.less";
 type Props = {}
 
-function index({ }: Props) {
+export default function index({ }: Props) {
   const dispatch = useDispatch();
-  // let [data, updateData] = useState([]);
-  const { songList } = useSelector((state) => (state as any).player);
   const { recommendList } = useSelector((state) => (state as any).ranking, shallowEqual);
 
   useEffect(() => {
     const fetchData = async () => {
       if (recommendList.length > 0) return;
       const { result } = await getPersonalized(30);
-      console.log(result);
-      // updateData(result);
-      dispatch(initRecommendList(result));
-      return () => {
-
+      if (_.isEqual(recommendList, result)) {
+        console.log(true)
+      } else {
+        console.log(false)
+        dispatch(initRecommendList(result));
       }
+    }
+    let flag = setInterval(() => {
+      console.log('alive')
+    }, 1000)
+    return () => {
+      clearInterval(flag);
     }
     fetchData();
   }, []);
@@ -31,20 +36,6 @@ function index({ }: Props) {
     const { songs } = await getSongList(id);
     dispatch(initSongList(songs));
   };
-  useEffect(() => {
-    if (songList.length !== 0) {
-      const song = songList[0];
-      const { name, al, ar, mv, id, dt } = song;
-      dispatch(initSong({
-        id: id,
-        dt: dt,
-        singer: ar.map((item: any) => item.name).join("/"),
-        songName: name,
-        picUrl: al.picUrl,
-        index: 0
-      }));
-    }
-  }, [songList])
   return (
     <div className={style['recommend']}>
       <div className={style['song-list-content']}>
@@ -68,6 +59,4 @@ function index({ }: Props) {
       </div>
     </div>
   )
-}
-
-export default index;
+};

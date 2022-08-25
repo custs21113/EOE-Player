@@ -20,7 +20,7 @@ const Ranking = (props: Props) => {
 
   const [flag, updateFlag] = useState(true);
   useLayoutEffect(() => {
-    if(officialRankListData.length > 0) {
+    if (officialRankListData.length > 0) {
       updateFlag(false);
     }
   }, [officialRankListData])
@@ -29,7 +29,7 @@ const Ranking = (props: Props) => {
   // const [officialRankListData, updateOfficialRankListData]: [any[], Function] = useState(ORLD);
   useEffect(() => {
     const playlist = async () => {
-      if(globalRankList.length || officialRankListData.length > 0) return;
+      if (globalRankList.length || officialRankListData.length > 0) return;
       const { data } = await getPlaylist();
       const grl = data.list.filter((item: any) => !item.ToplistType);
       const promiseArray = data.list.filter((item: any) => item.ToplistType).map(async ({ id, name, coverImgUrl }: any) => {
@@ -54,20 +54,20 @@ const Ranking = (props: Props) => {
     const { songs } = await getSongList(id);
     dispatch(initSongList(songs));
   };
-  useEffect(() => {
-    if (songList.length !== 0) {
-      const song = songList[0];
-      const { name, al, ar, mv, id, dt } = song;
-      dispatch(initSong({
-        id: id,
-        dt: dt,
-        singer: ar.map((item: any) => item.name).join("/"),
-        songName: name,
-        picUrl: al.picUrl,
-        index: 0
-      }));
-    }
-  }, [songList]);
+  // useEffect(() => {
+  //   if (songList.length !== 0) {
+  //     const song = songList[0];
+  //     const { name, al, ar, mv, id, dt } = song;
+  //     dispatch(initSong({
+  //       id: id,
+  //       dt: dt,
+  //       singer: ar.map((item: any) => item.name).join("/"),
+  //       songName: name,
+  //       picUrl: al.picUrl,
+  //       index: 0
+  //     }));
+  //   }
+  // }, [songList]);
   async function getData() {
     const { data } = await getPlaylist();
     const grl = data.list.filter((item: any) => !item.ToplistType);
@@ -87,11 +87,10 @@ const Ranking = (props: Props) => {
 
   // })
   const RankTop = useMemo(() => {
-    console.log('render');
-    return(
+    return (
       <div>
         {
-          flag ? <Spin spinning={ flag }/> :officialRankListData.map((item: RankTop5Props, index: number) => {
+          flag ? <Spin spinning={flag} /> : officialRankListData.map((item: RankTop5Props, index: number) => {
             return (
               <RankTop5 {...item} key={index} />
               // <CallBackRT5 {...item} key={index} />

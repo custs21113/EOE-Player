@@ -49,7 +49,9 @@ function index({ }: Props) {
             return (
               <div key={index} className={style['song-list']} onClick={() => handleSongListOnClick(id)}>
                 <div>
-                  <span>{playCount}</span>
+                  <div>
+                    <span>{playCount}</span>
+                  </div>
                   <img src={picUrl} style={{ width: "140px", height: "140px" }} alt="" />
                 </div>
                 <span>

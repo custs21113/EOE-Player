@@ -5,7 +5,7 @@ import { Slider } from 'antd'
 import Lyric from 'lyric-parser';
 import { changeLoop, changeVolume, nextSong, prevSong, randomPlay } from '../../states/playerSlice';
 import { AppDispatch } from '../../states/store';
-
+import eoe from "../../assets/images/eoe.jpg";
 
 type Props = {
   drawerVisible: boolean;
@@ -24,7 +24,7 @@ function index(props: Props, audioRef: any) {
   const [isSeeking, updateIsSeeking] = useState(false);
   let [l, updateL] = useState<Lyric | null>(null)
   // let [lyric, updateLyric] = useState<string>(currentLyric);
-  const { loop, volume, id, singer, songName, picUrl, dt } = useSelector((state) => (state as any).player, shallowEqual)
+  const { loop, volume, id, singer, songName, picUrl = eoe, dt } = useSelector((state) => (state as any).player, shallowEqual)
   // const { loop, volume, id, singer, songName, picUrl, dt, lyric } = player;
 
   function timeUpdate(e: any) {
@@ -102,9 +102,9 @@ function index(props: Props, audioRef: any) {
 
   return (
     <div className={style["player-container"]}>
-      <div className={style.player}>
+      <div className={style['player']}>
         <div className={style['song-info']}>
-          <img src={picUrl} alt="" className={style['ablumn']} onClick={(e) => {
+          <img src={picUrl === "" ? eoe : picUrl} alt="" className={style['ablumn']} onClick={(e) => {
             e.stopPropagation();
             updateSongDrawerVisible(!songDrawerVisible);
           }} />

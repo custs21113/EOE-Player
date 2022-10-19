@@ -2,7 +2,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #05121C;
   position: relative;
   bottom: 0px;
   .song-list-content {
@@ -22,11 +21,19 @@
         img {
           border-radius: 10px;
         }
-        span {
+        div {
+          height: 21px;
+          border-radius: 0px;
+          background-color: rgba(0, 0, 0, 0.5);
           position: absolute;
-          right: 5px;
-          top: 5px;
-          color: #c5c5c5;
+          display: flex;
+          justify-content: flex-end;
+          border-radius: 10px 10px 0px 0px;
+          span {
+            margin-right: 5px;
+            color: #c5c5c5;
+            // mix-blend-mode: difference;
+          }
         }
       }
       div:hover {

@@ -18,7 +18,7 @@ import { fetchUserById } from './states/testSlice';
 import { AppDispatch } from './states/store';
 import { durationTrans } from './utils/format';
 type Props = {}
-let ipcRenderer: any = null;
+let ipcRenderer: any = window?.electron.ipcRenderer;
 // // @ts-ignore
 // if (NODE_ENV === 'production') {
 //   // @ts-ignore
@@ -49,13 +49,13 @@ export default function App({ }: Props) {
   };
   // console.log('ipc', ipcRenderer)
   function minimize() {
-    // ipcRenderer?.send('window-minimize');
+    ipcRenderer?.send('window-minimize');
   }
   function maximize() {
-    // ipcRenderer?.send('window-maximize');
+    ipcRenderer?.send('window-maximize');
   }
   function close() {
-    // ipcRenderer?.send('window-close');
+    ipcRenderer?.send('window-close');
   }
   useEffect(() => {
     const initPlayer = async () => {
@@ -127,7 +127,7 @@ export default function App({ }: Props) {
   return (
     <div className={style['App']}>
       <div className={style['header']}>
-        <div style={{ color: "white" }}>ICON</div>
+        <div className={style['icon']}></div>
         <div className={style['nav-bar']}>
           <NavLink to="recommend" >推荐</NavLink >
           <NavLink to="ranking" >排行</NavLink >
@@ -140,9 +140,7 @@ export default function App({ }: Props) {
           <div className={style['close']} onClick={close}></div>
         </div>
       </div>
-      <div style={{
-        paddingBottom: "75px"
-      }}>
+      <div className={style['content']}>
 
         <Routes>
           <Route path='/' element={<Recommend />} />
@@ -157,11 +155,10 @@ export default function App({ }: Props) {
         placement="right"
         closable={false}
         onClose={onDrawerClose}
-        visible={drawerVisible}
+        open={drawerVisible}
         getContainer={false}
         width={420}
         mask={false}
-        zIndex={-1}
         bodyStyle={{
           padding: 0,
           overflowY: "scroll",
@@ -192,84 +189,7 @@ export default function App({ }: Props) {
 
         </div>
       </Drawer>
-      <Drawer
-        placement="bottom"
-        closable={false}
-        onClose={() => {
-          updateSongDrawerVisible(!songDrawerVisible)
-        }}
-        visible={songDrawerVisible}
-        getContainer={false}
-        mask={false}
-        bodyStyle={{
-          padding: 0,
-          overflow: "hidden",
-          height: songDrawerVisible ? "calc(100% - 75px)" : "0px"
-        }} style={{ position: 'absolute', height: songDrawerVisible ? "calc(100% - 75px)" : "0px", marginBottom: "75px", zIndex: songDrawerVisible ? 1000 : -1 }}
-      >
-        <div>
-          <div
-            style={{
-              width: songDrawerVisible ? "980px" : "0px",
-              height: songDrawerVisible ? "775px" : "0px",
-              margin: "auto",
-            }}
-          >
-            <div ref={scrollRef} style={{
-              width: "360px",
-              height: "520px",
-              border: "1px solid black",
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-              overflow: "auto"
-            }}>
-              <ul>
-                {
-                  lines?.map(({ time, txt }: any, index: React.Key | null | undefined) => {
-                    return (
-                      <li key={index} style={{
-                        fontWeight: line === index && songDrawerVisible ? "bold" : 400
-                      }} onClick={
-                        () => {
-                          ly?.play(time);
-                          console.log(time / 1000);
-                          audioRef.current.currentTime = time / 1000;
-                          // console.log(audioRef.current)
-                        }
-                      }>{txt}</li>
-                    )
-                  })
-                }
-              </ul>
-            </div>
-            <button style={{
-              position: "absolute",
-              bottom: 0
-            }} onClick={() => {
-              audioRef.current.pause();
-            }}>pause</button>
-            <button style={{
-              position: "absolute",
-              bottom: 0,
-              left: 100
-            }} onClick={() => {
-              audioRef.current.play();
-            }}>play</button>
-            {
-              currentLyric
-            }
-            <div>
-              <button onClick={
-                () => {
-                  dispatch(fetchUserById(33))
-                }
-              }>
-                PUSH</button></div>
-          </div>
-        </div>
-      </Drawer>
+      
       <div
         className={style['drawer']}
         style={{

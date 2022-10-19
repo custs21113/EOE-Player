@@ -10,7 +10,6 @@
   // font-family: PingFang SC, sans-serif;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 14px;
-  background-color: #05121c;
   // color: #000000;
   // background: #f2e7ca url(images/templatemo_body.jpg) top center no-repeat;
   .header {
@@ -20,6 +19,17 @@
     justify-content: space-between;
     border-bottom: 1px solid rgba(245, 222, 179, 0.2);
     -webkit-app-region: drag;
+    background: linear-gradient(45deg, #05121c, #021524);
+    position: sticky;
+    top: 0px;
+    z-index: 1;
+    .icon {
+      width: 48px;
+      height: 48px;
+      margin-left: 8px;
+      border: 1px solid #7e7e7e;
+      background: url("../renderer/assets/images/eoe.jpg") no-repeat center/cover;
+    }
     .nav-bar {
       -webkit-app-region: no-drag;
       width: 200px;
@@ -63,6 +73,13 @@
       font-size: 20px;
     }
   }
+  .content {
+    height: 775px;
+    padding-top: 16px;
+    padding-bottom: 75px;
+    position: relative;
+    background: linear-gradient(120deg, rgba(167, 234, 173, 01), rgba(249, 151, 113, 01), rgba(117, 200, 239, 01), rgba(240, 128, 171, 01), rgba(184, 105, 252, 01));
+  }
 }
 .container {
   ::-webkit-scrollbar {
@@ -71,12 +88,12 @@
 }
 .list-container {
   position: absolute;
-  // overflow-x: auto;
+  overflow-x: auto;
   // bottom: 75px;
   right: 0px;
   width: 420px;
   padding: 0 15px;
-  // height: 750px;
+  height: calc(100% - 75px);
   background-color: red;
   ::-webkit-scrollbar {
     display: none;

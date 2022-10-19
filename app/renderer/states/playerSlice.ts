@@ -19,9 +19,9 @@ interface InitialStateProps {
 export const initialState: InitialStateProps = {
   loop: 0,
   volume: 30,
-  picUrl: "test",
-  songName: "test",
-  singer: "test",
+  picUrl: "",
+  songName: "",
+  singer: "",
   dt: 0,
   current: 0,
   id: 0,

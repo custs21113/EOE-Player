@@ -54,7 +54,7 @@ function createWindow() {
     // tray.setContextMenu(contextMenu);
     if (isDev()) {
         // 加载应用----适用于 react 项目
-        mainWindow.loadURL('http://localhost:7001/');
+        mainWindow.loadURL('http://localhost:8080/');
     } else {
         // 加载应用-----react项目打包后的路径
         // mainWindow.loadURL(url.format({

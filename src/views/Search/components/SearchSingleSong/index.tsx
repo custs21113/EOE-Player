@@ -1,9 +1,10 @@
 import React, { forwardRef, useEffect, useState } from 'react';
 import style from './index.module.less';
 import { search, SearchType } from '../../../../service/search';
-import { useDispatch } from 'react-redux';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../../../states/store';
 import { addSongToPlayList } from '../../../../states/playerSlice';
+import getSongList from '../../../../service/getSongList';
 
 
 type Props = {
@@ -14,6 +15,7 @@ const Index = (props: Props) => {
   const { keyword } = props;
   const [songs, updateSongs] = useState<any>([]);
   const [songCount, updateSongCount] = useState<number>(0);
+  const { songList } = useSelector((state) => (state as any).player, shallowEqual);
   async function handleSearch(keyword: string, type: string = SearchType.SingleSong) {
     const { songCount = 0, songs = [] } = await search(keyword, type);
     updateSongs(songs);
@@ -31,11 +33,13 @@ const Index = (props: Props) => {
     console.log(song);
     const {id, dt, ar, al } = song;
     dispatch(addSongToPlayList({
+      ...song,
       id: id,
       dt: dt,
       singer: ar.map((item: any) => item.name).join("/"),
       songName: al.name,
       picUrl: al.picUrl,
+      index: songList.length
     }));
   };
   return (

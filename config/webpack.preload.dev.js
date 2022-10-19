@@ -6,19 +6,11 @@ const { DefinePlugin } = require('webpack')
 const common = require("./webpack.common.js");
 
 module.exports = merge(common, {
-  mode: "production",
+  mode: "development",
   entry: {
     preload: "./preload.js"
   },
   stats: "errors-only",
   devtool: 'inline-source-map',
   target: 'electron-renderer',
-  plugins: [
-    new CleanWebpackPlugin(),
-    new HTMLWebpackPlugin({
-      template: path.resolve(__dirname, "../public/index.html"),
-      filename: "index.html",
-      title: "au-player"
-    })
-  ]
 })

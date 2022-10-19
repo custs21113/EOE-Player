@@ -1,17 +1,16 @@
 const path = require('path');
-const webpack = require('webpack');
-const baseConfig = require('./webpack.base.js');
+const baseConfig = require('./webpack.common.js');
 const webpackMerge = require('webpack-merge');
 
 const mainConfig = {
-  entry: path.resolve(__dirname, '../app/main/electron.js'),
+  mode: 'production',
+  entry: path.resolve(__dirname, '../main.js'),
   target: 'electron-main',
   output: {
     filename: 'electron.js',
     path: path.resolve(__dirname, '../dist'),
   },
   devtool: 'inline-source-map',
-  mode: 'development',
 };
 
 module.exports = webpackMerge.merge(baseConfig, mainConfig);

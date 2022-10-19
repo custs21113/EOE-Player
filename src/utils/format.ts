@@ -12,3 +12,14 @@ export function durationTrans(a: any) {
   b += m + ":" + s
   return b;
 }
+export function parsePlayCount(playCount: number): number | string {
+  if (playCount) {
+    if(playCount / 10000 >= 1) {
+      return `${Math.floor(playCount / 10000)}万`;
+    } else {
+      return playCount;
+    }
+  } else {
+    return playCount;
+  }
+}

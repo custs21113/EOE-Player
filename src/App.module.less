@@ -11,15 +11,24 @@
   font-family: Arial, Helvetica, sans-serif;
   font-size: 14px;
   background-color: #05121c;
+
   // color: #000000;
   // background: #f2e7ca url(images/templatemo_body.jpg) top center no-repeat;
   .header {
     display: flex;
+    position: sticky;
+    z-index: 10;
+    top: 0px;
+    left: 0px;
     height: 50px;
+    width: 100%;
     align-items: center;
     justify-content: space-between;
+    background-color: #05121c;
+    // z-index: 1000;
     border-bottom: 1px solid rgba(245, 222, 179, 0.2);
     -webkit-app-region: drag;
+
     .nav-bar {
       -webkit-app-region: no-drag;
       width: 200px;
@@ -27,6 +36,7 @@
       justify-content: space-around;
       align-items: center;
     }
+
     .window-control {
       -webkit-app-region: no-drag;
       margin: 15px;
@@ -35,6 +45,7 @@
       width: 100px;
       align-items: center;
       justify-content: space-between;
+
       .minimize {
         width: 20px;
         height: 20px;
@@ -42,6 +53,7 @@
         background-repeat: no-repeat;
         background-size: cover;
       }
+
       .enlarge {
         width: 20px;
         height: 20px;
@@ -49,6 +61,7 @@
         background-repeat: no-repeat;
         background-size: cover;
       }
+
       .close {
         width: 20px;
         height: 20px;
@@ -57,6 +70,7 @@
         background-size: cover;
       }
     }
+
     .window-control::before {
       content: "|";
       color: white;
@@ -64,11 +78,13 @@
     }
   }
 }
+
 .container {
   ::-webkit-scrollbar {
     display: none;
   }
 }
+
 .list-container {
   position: absolute;
   // overflow-x: auto;
@@ -78,10 +94,12 @@
   padding: 0 15px;
   // height: 750px;
   background-color: red;
+
   ::-webkit-scrollbar {
     display: none;
   }
 }
+
 .song-content {
   display: flex;
   justify-content: space-between;
@@ -94,6 +112,7 @@
   text-overflow: ellipsis;
   overflow-x: hidden;
   white-space: nowrap;
+
   .song-name {
     // width: 150px;
     flex: 1 0 200px;
@@ -101,6 +120,7 @@
     overflow-x: hidden;
     white-space: nowrap;
   }
+
   .singer {
     // width: 150px;
     flex: 1 0 150px;
@@ -108,6 +128,7 @@
     overflow-x: hidden;
     white-space: nowrap;
   }
+
   .duration {
     flex: 0 0 75px;
     text-overflow: ellipsis;
@@ -115,13 +136,16 @@
     white-space: nowrap;
   }
 }
+
 .song-content:hover {
   cursor: pointer;
   background-color: yellowgreen;
 }
+
 .list-container-hide {
   display: none;
 }
+
 .drawer {
   width: 530px;
   height: calc(100% - 75px);
@@ -133,10 +157,12 @@
   z-index: 1000;
   animation: drawer-anime 5s ease-in 0s 1 normal;
 }
+
 @keyframes drawer-anime {
   0% {
     right: -520px;
   }
+
   100% {
     right: 0px;
   }

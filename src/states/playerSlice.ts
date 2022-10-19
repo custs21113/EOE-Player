@@ -19,9 +19,9 @@ interface InitialStateProps {
 export const initialState: InitialStateProps = {
   loop: 0,
   volume: 30,
-  picUrl: "test",
-  songName: "test",
-  singer: "test",
+  picUrl: "",
+  songName: "",
+  singer: "",
   dt: 0,
   current: 0,
   id: 0,
@@ -75,11 +75,14 @@ export const playerSlice = createSlice({
     },
     addSongToPlayList: (state, action) => {
       const { songList } = state;
-      state = {
-        ...state,
-        index: songList.length,
-        ...action.payload,
-      };
+      if(!songList.some(({id}) => id === action.payload.id)) {
+        state = {
+          ...state,
+          ...action.payload,
+          index: songList.length,
+          songList: [...songList, action.payload]
+        };
+      }
       return state;
     },
     initPlayer: (state, action) => {

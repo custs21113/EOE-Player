@@ -5,6 +5,8 @@ import { Slider } from 'antd'
 import Lyric from 'lyric-parser';
 import { changeLoop, changeVolume, nextSong, prevSong, randomPlay } from '../../states/playerSlice';
 import { AppDispatch } from '../../states/store';
+import { durationTrans } from '../../utils/format';
+import eoe from "../../assets/images/eoe.jpg";
 
 
 type Props = {
@@ -17,34 +19,21 @@ type Props = {
   currentLyric: string;
 }
 
-function index(props: Props, audioRef: any) {
+function index(props: Props, audioRef: React.Ref<HTMLAudioElement> | any): JSX.Element {
   const dispatch = useDispatch<AppDispatch>();
   const { drawerVisible, updateDrawerVisible, songDrawerVisible, updateSongDrawerVisible, isPlaying, updateIsPlaying, currentLyric } = props;
   const [currentTime, updateCurrentTime] = useState(0);
   const [isSeeking, updateIsSeeking] = useState(false);
   let [l, updateL] = useState<Lyric | null>(null)
   // let [lyric, updateLyric] = useState<string>(currentLyric);
-  const { loop, volume, id, singer, songName, picUrl, dt } = useSelector((state) => (state as any).player, shallowEqual)
+  const { loop, volume, id, singer, songName, picUrl = eoe, dt } = useSelector((state) => (state as any).player, shallowEqual)
   // const { loop, volume, id, singer, songName, picUrl, dt, lyric } = player;
 
   function timeUpdate(e: any) {
     let currentTime = e.target.currentTime;
     !isSeeking && updateCurrentTime(currentTime);
   }
-  function durationTrans(a: any) {
-    var b = ""
-    var h: number | string = parseInt((a / 3600).toString()),
-      m: number | string = parseInt((a % 3600 / 60).toString()),
-      s: number | string = parseInt((a % 3600 % 60).toString());
-    if (h > 0) {
-      h = h < 10 ? '0' + h : h
-      b += h + ":"
-    }
-    m = m < 10 ? '0' + m : m
-    s = s < 10 ? '0' + s : s
-    b += m + ":" + s
-    return b;
-  }
+
   function handlePrevBtn() {
     dispatch(prevSong())
   }
@@ -102,9 +91,9 @@ function index(props: Props, audioRef: any) {
 
   return (
     <div className={style["player-container"]}>
-      <div className={style.player}>
-        <div className={style['song-info']}>
-          <img src={picUrl} alt="" className={style['ablumn']} onClick={(e) => {
+    <div className={style['player']}>
+      <div className={style['song-info']}>
+        <img src={picUrl === "" ? eoe : picUrl} alt="" className={style['ablumn']} onClick={(e) => {
             e.stopPropagation();
             updateSongDrawerVisible(!songDrawerVisible);
           }} />
@@ -163,7 +152,6 @@ function index(props: Props, audioRef: any) {
         </div>
       </div>
     </div>
-
   )
 }
 

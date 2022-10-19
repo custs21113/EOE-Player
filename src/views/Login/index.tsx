@@ -4,8 +4,20 @@ import { getQrKey, login, checkStatus } from '../../api/login';
 import { useSelector, useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { account } from '../../api/user';
+import { Button, Modal, Skeleton } from 'antd';
+import CountItem from './components/CountItem';
 type Props = {}
-
+const info = () => {
+  Modal.info({
+    content: (
+      <div>
+        <p>some messages...some messages...</p>
+        <p>some messages...some messages...</p>
+      </div>
+    ),
+    onOk() { },
+  });
+};
 function index({ }: Props) {
   const dispatch = useDispatch();
   const locationRef = useRef(window.location);
@@ -13,6 +25,7 @@ function index({ }: Props) {
   const imgRef = useRef<HTMLImageElement>(null);
   const [username, updateUsername] = useState('');
   const [password, updatePassword] = useState('');
+  const [modalVisible, updateModalVisible] = useState<boolean>(false);
   const song = useSelector(state => (state as any).song);
   const MyInterval = (func: Function, delay: number = 3000) => {
     timerRef.current = setTimeout(() => {
@@ -50,7 +63,6 @@ function index({ }: Props) {
   }
   useEffect(() => {
     initQrCode();
-
   }, []);
   const handleAccount = async () => {
     const result = await account();
@@ -63,20 +75,16 @@ function index({ }: Props) {
     updatePassword(e.target.value)
   }
   return (
-    <div className={style.login}>
+    <div className={style.loginPage}>
       <img ref={imgRef} />
       <div>
         <button onClick={handleAccount}>Account</button>
+        <Button onClick={() => {
+          updateModalVisible(!modalVisible)
+        }}>Info</Button>
+        {/* <Skeleton.Image /> */}
+        <CountItem />
       </div>
-      {/* <div>
-        <input type="text" value={username} onChange={handleUsername}/>
-      </div>
-      <div>
-        <input type="text" value={password} onChange={handlePassword}/>
-      </div>
-      <div>
-        <button onClick={() => console.log(username, password)}>Login</button>
-      </div> */}
     </div>
   )
 }

@@ -1,33 +1,19 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Drawer, message } from 'antd';
+import { Drawer } from 'antd';
+import Lyric from 'lyric-parser';
 import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import { NavLink, Routes, Route } from 'react-router-dom';
+
+import { Ranking, Player, Recommend, Search, Login } from './views'
+import { AppDispatch } from './states/store';
+import { fetchUserById } from './states/testSlice';
 import { getLyricService, initSong } from './states/playerSlice';
 
-import Ranking from './views/Ranking';
-import Player from './views/Player';
-import Recommend from './views/Recommend';
-import Search from './views/Search';
-import Login from './views/Login';
-
-import 'antd/dist/antd.css';
+import { durationTrans } from './utils/format';
+import { ipcRenderer } from './utils/bridge';
 import style from './App.module.less';
 
-import Lyric from 'lyric-parser';
-import { fetchUserById } from './states/testSlice';
-import { AppDispatch } from './states/store';
-import { durationTrans } from './utils/format';
 type Props = {}
-let ipcRenderer: any = null;
-// @ts-ignore
-if (NODE_ENV === 'production') {
-  // @ts-ignore
-  const electron = window.electron;
-  ipcRenderer = electron.ipcRenderer;
-} else {
-  // @ts-ignore
-  ipcRenderer = null;
-}
 
 export default function App({ }: Props) {
   const dispatch = useDispatch<AppDispatch>();
@@ -40,32 +26,27 @@ export default function App({ }: Props) {
   const [line, updateLine] = useState<number>(0);
   const [songDrawerVisible, updateSongDrawerVisible] = useState<boolean>(false);
   const [isPlaying, updateIsPlaying] = useState<boolean>(false);
-  const { loop, volume, id, singer, songName, picUrl, dt, lyric, song, songList } = useSelector((state) => (state as any).player, shallowEqual);
-  const { entities, loading } = useSelector((state) => (state as any).test, shallowEqual);
-  const player = useSelector((state) => (state as any).player, shallowEqual);
+  const { volume, id, lyric, songList } = useSelector((state) => (state as any).player, shallowEqual);
 
   function onDrawerClose() {
     updateDrawerVisible(!drawerVisible);
   };
-  // console.log('ipc', ipcRenderer)
+
   function minimize() {
-    // ipcRenderer?.send('window-minimize');
+    ipcRenderer?.send('window-minimize');
   }
   function maximize() {
-    // ipcRenderer?.send('window-maximize');
+    ipcRenderer?.send('window-maximize');
   }
   function close() {
-    // ipcRenderer?.send('window-close');
+    ipcRenderer?.send('window-close');
   }
   useEffect(() => {
     const initPlayer = async () => {
       if (audioRef.current && id) {
         audioRef.current.src = `https://music.163.com/song/media/outer/url?id=${id}.mp3`;
         audioRef.current.preload = "auto";
-
         dispatch(getLyricService(id));
-
-
         audioRef.current.oncanplay = () => {
           audioRef.current?.play();
           audioRef.current.volume = volume / 100;
@@ -76,7 +57,23 @@ export default function App({ }: Props) {
       }
     }
     initPlayer();
+    console.log("APP_SONGID:", id);
   }, [id]);
+
+  useEffect(() => {
+    if (songList.length !== 0) {
+      const song = songList[0];
+      const { name, al, ar, mv, id, dt } = song;
+      dispatch(initSong({
+        id: id,
+        dt: dt,
+        singer: ar.map((item: any) => item.name).join("/"),
+        songName: name,
+        picUrl: al.picUrl,
+        index: 0
+      }));
+    }
+  }, [songList])
 
   useEffect(() => {
     if (lyric !== "") {
@@ -127,12 +124,12 @@ export default function App({ }: Props) {
   return (
     <div className={style['App']}>
       <div className={style['header']}>
-        <div style={{ color: "white" }}>ICON</div>
+        <div className={style['icon']}></div>
         <div className={style['nav-bar']}>
           <NavLink to="recommend" >推荐</NavLink >
           <NavLink to="ranking" >排行</NavLink >
           <NavLink to="search" >搜索</NavLink >
-          <NavLink to="login" >登录</NavLink >
+          {/* <NavLink to="login" >登录</NavLink > */}
         </div>
         <div className={style['window-control']}>
           <div className={style['minimize']} onClick={minimize}></div>
@@ -140,10 +137,7 @@ export default function App({ }: Props) {
           <div className={style['close']} onClick={close}></div>
         </div>
       </div>
-      <div style={{
-        paddingBottom: "75px"
-      }}>
-
+      <div className={style['content']}>
         <Routes>
           <Route path='/' element={<Recommend />} />
           <Route path='/recommend' element={<Recommend />} />
@@ -157,11 +151,10 @@ export default function App({ }: Props) {
         placement="right"
         closable={false}
         onClose={onDrawerClose}
-        visible={drawerVisible}
+        open={drawerVisible}
         getContainer={false}
         width={420}
         mask={false}
-        zIndex={-1}
         bodyStyle={{
           padding: 0,
           overflowY: "scroll",
@@ -169,7 +162,7 @@ export default function App({ }: Props) {
         }}
 
         className={drawerVisible ? style.container : ""}
-        style={{ position: 'absolute', height: drawerVisible ? "calc(100% - 125px)" : "0px", marginTop: "50px", marginBottom: "75px", zIndex: drawerVisible ? 1001 : -1 }}>
+        style={{ position: 'absolute', height: drawerVisible ? "calc(100% - 125px)" : "0px", marginBottom: "75px", zIndex: drawerVisible ? 1001 : -1 }}>
         <div className={style['list-container']}>
           {
             songList?.length > 0 && songList.map((item: any, index: number) => {

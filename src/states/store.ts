@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
 import thunkMiddleware from 'redux-thunk';
 import player from './playerSlice';
-import test from './testSlice'
+import test from './testSlice';
+import ranking from './rankingSlice';
 const store = configureStore({
   reducer: {
     player,
-    test
+    test,
+    ranking,
   },
   // middleware: [thunkMiddleware]
 });

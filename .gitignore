@@ -107,6 +107,7 @@ dist
 src/static/*.json
 package-lock.json
 yarn-lock.json
+yarn.lock
 
 /dist
 /node_modules

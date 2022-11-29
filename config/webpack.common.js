@@ -13,6 +13,7 @@ module.exports = {
     alias: {
       "@": path.resolve(__dirname, "../src"),
       "~": path.resolve(__dirname, "../"),
+      "~resources": path.resolve(__dirname, "../src/assets"),
     },
     extensions: [".ts", ".tsx", ".js", "jsx"],
     mainFiles: ["index.ts", "index.js", "index.tsx", "index.jsx"]
@@ -23,7 +24,7 @@ module.exports = {
         test: /\.(png|jpg|gif)$/i,
         type: 'asset',
         generator: {
-          filename: 'images/[fullhash].[ext]'
+          filename: 'images/[name].[ext]'
         }
       },
       {
@@ -83,7 +84,7 @@ module.exports = {
   },
   plugins: [
     new DefinePlugin({
-      NODE_ENV: `${process.env.NODE_ENV}`,
+      // NODE_ENV: `${process.env.NODE_ENV}`,
       __dirname: '__dirname',
     })
   ]

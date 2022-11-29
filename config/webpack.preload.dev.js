@@ -11,6 +11,6 @@ module.exports = merge(common, {
     preload: "./preload.js"
   },
   stats: "errors-only",
-  devtool: 'inline-source-map',
+  devtool: 'source-map',
   target: 'electron-renderer',
 })

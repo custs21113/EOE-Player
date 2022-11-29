@@ -1,6 +1,7 @@
 const path = require('path');
 const baseConfig = require('./webpack.common.js');
 const webpackMerge = require('webpack-merge');
+const { EnvironmentPlugin } = require('webpack')
 
 const mainConfig = {
   mode: 'production',
@@ -10,7 +11,12 @@ const mainConfig = {
     filename: 'electron.js',
     path: path.resolve(__dirname, '../dist'),
   },
-  devtool: 'inline-source-map',
+  devtool: 'source-map',
+  plugins: [
+    new EnvironmentPlugin({
+      NODE_ENV: 'production'
+    })
+  ]
 };
 
 module.exports = webpackMerge.merge(baseConfig, mainConfig);

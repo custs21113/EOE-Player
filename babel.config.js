@@ -14,5 +14,12 @@ module.exports = {
         lazy: true,
       },
     ],
+    [
+      "import", {
+        "libraryName": "antd",
+        "libraryDirectory": "es",
+        "style": "css"
+      }],
+    ["@babel/plugin-proposal-class-properties"]
   ]
 }

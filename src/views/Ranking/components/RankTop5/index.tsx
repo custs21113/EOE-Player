@@ -35,9 +35,9 @@ const RankTop5 = (props: RankTop5Props) => {
           songs.length > 0 && songs?.map((song : any, index: number) => {
             const { name, id, ar } = song;
             return (
-              <div key={id} className={style.songItem} onClick={() => handleSongClick(song)}>
+              <div key={id} className={style.songItem}>
                 <div className={style.index}>{index + 1}</div>
-                <div className={style.songName}>{name}</div>
+                <div className={style.songName} onClick={() => handleSongClick(song)}>{name}</div>
                 <div className={style.singer} title={ar.map((item: any) => item.name).join("/")}>{ar.map((item: any) => item.name).join("/")}</div>
               </div>
             )

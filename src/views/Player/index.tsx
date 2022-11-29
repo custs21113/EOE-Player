@@ -1,4 +1,4 @@
-import React, { forwardRef, useState } from 'react'
+import React, { forwardRef, MouseEventHandler, useState } from 'react'
 import style from './index.module.less'
 import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import { Slider } from 'antd'
@@ -6,12 +6,12 @@ import Lyric from 'lyric-parser';
 import { changeLoop, changeVolume, nextSong, prevSong, randomPlay } from '../../states/playerSlice';
 import { AppDispatch } from '../../states/store';
 import { durationTrans } from '../../utils/format';
-import eoe from "../../assets/images/eoe.jpg";
-
+import eoe from "@/assets/images/eoe.jpg";
 
 type Props = {
-  drawerVisible: boolean;
-  updateDrawerVisible: Function;
+  like: boolean;
+  switchLike: () => void;
+  switchDrawer: () => void;
   songDrawerVisible: boolean;
   updateSongDrawerVisible: Function;
   isPlaying: boolean;
@@ -21,14 +21,13 @@ type Props = {
 
 function index(props: Props, audioRef: React.Ref<HTMLAudioElement> | any): JSX.Element {
   const dispatch = useDispatch<AppDispatch>();
-  const { drawerVisible, updateDrawerVisible, songDrawerVisible, updateSongDrawerVisible, isPlaying, updateIsPlaying, currentLyric } = props;
+  const { like, switchLike, switchDrawer, songDrawerVisible, updateSongDrawerVisible, isPlaying, updateIsPlaying, currentLyric } = props;
   const [currentTime, updateCurrentTime] = useState(0);
   const [isSeeking, updateIsSeeking] = useState(false);
   let [l, updateL] = useState<Lyric | null>(null)
   // let [lyric, updateLyric] = useState<string>(currentLyric);
   const { loop, volume, id, singer, songName, picUrl = eoe, dt } = useSelector((state) => (state as any).player, shallowEqual)
   // const { loop, volume, id, singer, songName, picUrl, dt, lyric } = player;
-
   function timeUpdate(e: any) {
     let currentTime = e.target.currentTime;
     !isSeeking && updateCurrentTime(currentTime);
@@ -76,7 +75,7 @@ function index(props: Props, audioRef: React.Ref<HTMLAudioElement> | any): JSX.E
     dispatch(randomPlay())
   }
   async function handleAudioEnd() {
-    console.log("END")
+    updateIsPlaying(false);
     switch (loop) {
       case 0:
         return await handleNextBtn();
@@ -90,11 +89,10 @@ function index(props: Props, audioRef: React.Ref<HTMLAudioElement> | any): JSX.E
   }
 
   return (
-    <div className={style["player-container"]}>
-    <div className={style['player']}>
-      <div className={style['song-info']}>
-        <img src={picUrl === "" ? eoe : picUrl} alt="" className={style['ablumn']} onClick={(e) => {
-            e.stopPropagation();
+    <div className={style["player-container"]} onClick={(e) => e.preventDefault()}>
+      <div className={style['player']}>
+        <div className={style['song-info']}>
+          <img src={picUrl === "" ? eoe : picUrl} alt="" className={style['ablumn']} onClick={() => {
             updateSongDrawerVisible(!songDrawerVisible);
           }} />
           <div className={style['song']}>
@@ -112,8 +110,8 @@ function index(props: Props, audioRef: React.Ref<HTMLAudioElement> | any): JSX.E
               onTimeUpdate={timeUpdate}
               onEnded={handleAudioEnd}
             />
-            <Slider value={currentTime} min={0} max={Math.round(dt / 1000)} onChange={(value) => handleSliderChange(value)}
-              onAfterChange={(value) => handleSliderChangeEnd(value)}
+            <Slider value={currentTime} min={0} max={Math.round(dt / 1000)} onChange={(value: number) => handleSliderChange(value)}
+              onAfterChange={(value: number) => handleSliderChangeEnd(value)}
               step={1}
               tooltipVisible={false} vertical={false} className={style['slider']}></Slider>
           </div>
@@ -123,30 +121,31 @@ function index(props: Props, audioRef: React.Ref<HTMLAudioElement> | any): JSX.E
             <div className={style['play-control']}>
               <div className={style.prev} onClick={handlePrevBtn}></div>
               <div className={isPlaying ? style.pause : style.play} onClick={async () => {
-                if (isPlaying) {
-                  audioRef.current?.pause();
-                  updateIsPlaying(false);
-                } else {
-                  audioRef.current?.play();
-                  updateIsPlaying(true);
+                try {
+                  if (isPlaying) {
+                    audioRef.current?.pause();
+                    updateIsPlaying(false);
+                  } else {
+                    audioRef.current?.play();
+                    updateIsPlaying(true);
+                  }
+                } catch (error) {
+                  console.error(error);
                 }
               }}></div>
               <div className={style.next} onClick={handleNextBtn}></div>
             </div>
             <div className={style['other-control']}>
-              <div className={style.dislike}></div>
+              <div className={like ? style['like'] : style['dislike']} onClick={switchLike}></div>
               <div className={parseLoop(loop)} onClick={() => dispatch(changeLoop({ loop }))}></div>
-              <div className={style.list} onClick={(e) => {
-                e.stopPropagation();
-                updateDrawerVisible(!drawerVisible);
-              }}>
+              <div className={style.list} onClick={switchDrawer}>
               </div>
             </div>
           </div>
           <div className={style['volume-control']}>
             <div>{durationTrans(currentTime)}/{dt === 0 ? "00:00" : durationTrans(dt / 1000)}</div>
-            <Slider value={volume} onChange={value => handleVolumeChange(value)}
-              onAfterChange={value => handleVolumeSliderChangeEnd(value)}
+            <Slider value={volume} onChange={(value: number) => handleVolumeChange(value)}
+              onAfterChange={(value: number) => handleVolumeSliderChangeEnd(value)}
               min={0} max={100} step={1} vertical={false} className={style['volume']}></Slider>
           </div>
         </div>

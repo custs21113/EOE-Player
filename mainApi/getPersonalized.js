@@ -1,6 +1,6 @@
 const request = require('./request');
-async function getPersonalized() {
-  const { data } = await request(`/personalized?limit=10`);
+async function getPersonalized(num = 10) {
+  const { data } = await request(`/personalized?limit=${num}`);
   return data;
 };
 module.exports = getPersonalized;

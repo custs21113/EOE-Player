@@ -2,6 +2,7 @@ const path = require("path");
 const { merge } = require("webpack-merge");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const HTMLWebpackPlugin = require("html-webpack-plugin");
+const { EnvironmentPlugin } = require('webpack');
 const common = require("./webpack.common.js");
 
 module.exports = merge(common, {
@@ -12,18 +13,21 @@ module.exports = merge(common, {
   devServer: {
     static: {
       directory: path.resolve(__dirname, "../dist")
-    }, 
+    },
     hot: true,
     open: true,
     port: 3001,
     historyApiFallback: true,
   },
   plugins: [
+    new EnvironmentPlugin({
+      NODE_ENV: 'development'
+    }),
     new CleanWebpackPlugin(),
     new HTMLWebpackPlugin({
       template: path.resolve(__dirname, "../public/index.html"),
       filename: "index.html",
-      title: "au-player"
+      title: "eoe-player"
     })
   ]
 })

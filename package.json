@@ -1,12 +1,10 @@
 {
   "name": "eoe_player",
   "version": "1.0.0",
-  "description": "",
+  "description": "eoe_player",
   "homepage": "./",
   "main": "./dist/electron.js",
   "scripts": {
-    "start:main": "webpack --config ./webpack/webpack.main.dev.js && electron ./dist/electron.js",
-    "start:render": "webpack-dev-server --config ./webpack/webpack.render.dev.js",
     "install:electron": "ELECTRON_MIRROR=https://cdn.npm.taobao.org/dist/electron/ npm install electron",
     "start": "wait-on npm run webpack serve --config ./config/webpack.dev.js && npm run electron . dev",
     "react:dev": "cross-env NODE_ENV=development webpack serve --config ./config/webpack.dev.js",
@@ -16,67 +14,65 @@
     "build": "cross-env NODE_ENV=production webpack --config ./config/webpack.prod.js && webpack --config ./config/webpack.main.prod.js && electron ./dist/electron.js",
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
-    "end": "cross-env NODE_ENV=production webpack --config ./config/webpack.prod.js && webpack --config ./config/webpack.main.prod.js && electron-builder --dir",
+    "end": "cross-env NODE_ENV=production webpack --config ./config/webpack.prod.js && webpack --config ./config/webpack.main.prod.js && electron-builder --x64",
     "electron:dev": "electron . dev",
     "electron": "electron . prod",
+    "package": "electron-packager . eoe_player --win --out packout --app-version=1.0.0 --icon=./src/assets/icons/icon.png --verbose --overwrite --win32metadata.CompanyName=nougat",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "nougat",
   "license": "ISC",
   "build": {
-    "appId": "au-music.ElectronReact",
-    "productName": "au-music",
-    "asar": true,
-    "copyright": "Copyright © 2019 ${author}",
+    "appId": "eoe_player",
+    "productName": "eoe_player",
+    "copyright": "Copyright © 2022 ${author}",
     "files": [
       "dist/**/*",
       "package.json",
       "node_modules/"
     ],
+    "extraResources": [
+      {
+        "from": "public/",
+        "to": "../"
+      }
+    ],
     "directories": {
       "buildResources": "assets",
       "output": "distAssets"
     },
-    "mac": {
-      "target": [
-        "dmg",
-        "zip"
-      ]
-    },
-    "dmg": {
-      "contents": [
-        {
-          "x": 130,
-          "y": 220
-        },
-        {
-          "x": 410,
-          "y": 220,
-          "type": "link",
-          "path": "/Applications"
-        }
-      ]
-    },
     "win": {
+      "icon": "public/icon.icns",
+      "requestedExecutionLevel": "highestAvailable",
       "target": [
-        "nsis",
-        "msi"
+        "nsis"
       ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowElevation": true,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "eoe_player"
     }
   },
   "devDependencies": {
     "@babel/cli": "^7.17.10",
     "@babel/core": "^7.18.2",
+    "@babel/plugin-proposal-class-properties": "^7.18.6",
     "@babel/plugin-transform-modules-commonjs": "^7.18.2",
     "@babel/plugin-transform-runtime": "^7.18.2",
     "@babel/preset-env": "^7.18.2",
     "@babel/preset-react": "^7.17.12",
     "@babel/preset-typescript": "^7.17.12",
+    "@types/antd": "^1.0.0",
     "@types/lyric-parser": "^1.0.2",
     "@types/react": "^18.0.8",
     "@types/react-dom": "^18.0.3",
     "babel-loader": "^8.2.5",
+    "babel-plugin-import": "^1.13.5",
     "clean-webpack-plugin": "^4.0.0",
     "concurrently": "^7.1.0",
     "cross-env": "^7.0.3",
@@ -105,8 +101,10 @@
     "@types/lodash": "^4.14.183",
     "antd": "^4.20.2",
     "axios": "^0.25.0",
-    "lodash": "^4.17.21",
+    "download": "^8.0.0",
+    "electron-packager": "^17.0.0",
     "less": "^4.1.3",
+    "lodash": "^4.17.21",
     "lyric-parser": "^1.0.1",
     "proxy-from-env": "^1.1.0",
     "react": "^18.1.0",

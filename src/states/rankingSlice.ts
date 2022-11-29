@@ -30,8 +30,7 @@ export const rankingSlice = createSlice({
       return state;
     },
     initGlobalRankList: (state, action) => {
-      console.log(action.payload);
-      localStorage.setItem('globalRankList', JSON.stringify(action.payload));
+      localStorage.setItem('globalRankList', JSON.stringify(action.payload || []));
       state = {
         ...state,
         globalRankList: action.payload,
@@ -39,8 +38,7 @@ export const rankingSlice = createSlice({
       return state;
     },
     initOfficialRankListData: (state, action) => {
-      console.log(action.payload);
-      localStorage.setItem('officialRankListData', JSON.stringify(action.payload));
+      localStorage.setItem('officialRankListData', JSON.stringify(action.payload || []));
       state = {
         ...state,
         officialRankListData: action.payload
@@ -48,8 +46,7 @@ export const rankingSlice = createSlice({
       return state;
     },
     initRecommendList: (state, action) => {
-      console.log(action.payload);
-      localStorage.setItem('recommendList', JSON.stringify(action.payload));
+      localStorage.setItem('recommendList', JSON.stringify(action.payload || []));
       state = {
         ...state,
         recommendList: action.payload,
@@ -68,12 +65,10 @@ export const rankingSlice = createSlice({
   // },
   // extraReducers: {
   //   [getLyricService.fulfilled.toString()]: (state: InitialStateProps, action: any) => {
-  //       console.log(action)
   //       state.lyric = action?.payload;
   //       return state;
   //   },
   //   [getLyricService.rejected.toString()]: (state: InitialStateProps, action: any) => {
-  //     console.log(action)
   //       state.lyric = ""
   //       return state;
   //   }

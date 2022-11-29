@@ -1,49 +1,252 @@
 .App {
-  height: 850px;
+  min-height: 850px;
   width: 100vw;
+  bottom: 0px;
   position: relative;
-  // background-image: url("@/assets/images/example.png");
   background-repeat: no-repeat;
   background-size: cover;
-  // background-color: green;
   line-height: 1.5em;
-  // font-family: PingFang SC, sans-serif;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 14px;
-  // color: #000000;
-  // background: #f2e7ca url(images/templatemo_body.jpg) top center no-repeat;
-  .header {
-    display: flex;
-    position: sticky;
-    z-index: 10;
-    top: 0px;
-    left: 0px;
-    height: 50px;
-    width: 100%;
-    align-items: center;
-    justify-content: space-between;
-    background-color: #05121c;
-    // z-index: 1000;
-    border-bottom: 1px solid rgba(245, 222, 179, 0.2);
-    -webkit-app-region: drag;
-    background: linear-gradient(45deg, #05121c, #021524);
-    position: sticky;
-    top: 0px;
-    z-index: 1;
-    .icon {
-      width: 48px;
-      height: 48px;
-      margin-left: 8px;
-      border: 1px solid #7e7e7e;
-      background: url("../renderer/assets/images/eoe.jpg") no-repeat center/cover;
-    }
-    .nav-bar {
-      -webkit-app-region: no-drag;
-      width: 200px;
+  background: linear-gradient(90deg, rgba(167, 234, 173, 1), rgba(249, 151, 113, 1), rgba(117, 200, 239, 1), rgba(240, 128, 171, 1), rgba(184, 105, 252, 1));
+
+
+  .content {
+    min-height: 800px;
+    overflow: scroll;
+    position: relative;
+    backdrop-filter: blur(50px);
+    z-index: 100;
+
+    .header {
       display: flex;
-      justify-content: space-around;
+      position: sticky;
+      z-index: 10;
+      top: 0px;
+      left: 0px;
+      height: 50px;
+      width: 100%;
       align-items: center;
+      justify-content: space-between;
+      background-color: #05121c;
+      // z-index: 1000;
+      border-bottom: 1px solid rgba(245, 222, 179, 0.2);
+      -webkit-app-region: drag;
+      background: linear-gradient(45deg, #05121c, #021524);
+      position: sticky;
+      top: 0px;
+      z-index: 1;
+
+      .icon {
+        width: 48px;
+        height: 48px;
+        margin-left: 8px;
+        background: url("@/assets/images/eoe.jpg") no-repeat center/cover;
+      }
+
+      .nav-bar {
+        -webkit-app-region: no-drag;
+        width: 200px;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+      }
+
+      .window-control {
+        -webkit-app-region: no-drag;
+        margin: 15px;
+        display: flex;
+        height: 20px;
+        width: 100px;
+        align-items: center;
+        justify-content: space-between;
+
+        .minimize {
+          width: 20px;
+          height: 20px;
+          background-image: url("@/assets/icons/minimize.svg");
+          background-repeat: no-repeat;
+          background-size: cover;
+        }
+
+        :hover {
+          cursor: pointer;
+        }
+
+        .enlarge {
+          width: 20px;
+          height: 20px;
+          background-image: url("@/assets/icons/enlarge.svg");
+          background-repeat: no-repeat;
+          background-size: cover;
+        }
+
+        .close {
+          width: 20px;
+          height: 20px;
+          background-image: url("@/assets/icons/close.svg");
+          background-repeat: no-repeat;
+          background-size: cover;
+        }
+      }
+
+      .window-control::before {
+        content: "|";
+        color: white;
+        font-size: 20px;
+      }
     }
+
+    .content-container {
+      margin-top: 50px;
+      min-height: 725px;
+      position: absolute;
+      top: 0px;
+      width: 100%;
+      overflow: scroll;
+    }
+  }
+
+  .ant-drawer-body {
+    padding: 0px;
+  }
+}
+
+.container {
+  ::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.list-header {
+  &-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 16px;
+  }
+
+  &-detail {
+    display: flex;
+    justify-content: space-between;
+    margin: 16px;
+
+    .songs-total {
+      color: #CFCFCF;
+    }
+
+    .songs-collect {
+      color: #CFCFCF;
+    }
+
+    .song-collect:hover {
+      cursor: pointer;
+    }
+
+    .songs-clear {
+      color: #507DAF;
+    }
+
+    .songs-clear:hover {
+      color: #6E9CD0;
+      cursor: pointer;
+    }
+  }
+
+  &-devide {
+    margin: 16px 16px 0px;
+    border-bottom: 1px solid #F2F2F2;
+  }
+}
+
+.list-container {
+  overflow-x: auto;
+  overflow-y: scroll;
+  bottom: 75px;
+  right: 0px;
+  width: 420px;
+
+  .song-content {
+    padding: 0 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 30px;
+    line-height: 28px;
+    font-size: 14px !important;
+    text-overflow: ellipsis;
+    overflow-x: hidden;
+    white-space: nowrap;
+    position: relative;
+
+    .song-name {
+      flex: 1 0 200px;
+      text-overflow: ellipsis;
+      overflow-x: hidden;
+      white-space: nowrap;
+      // pointer-events: none;
+      user-select: none;
+    }
+
+    // .song-name::after {
+    //   content: '';
+    //   cursor: pointer;
+    //   pointer-events: auto;
+    //   position: absolute;
+    //   width: 16px;
+    //   height: 16px;
+    //   margin-left: 8px;
+    //   top: 50%;
+    //   transform: translateY(-50%);
+    //   background: url("@/assets/icons/player-play.svg") no-repeat center / cover;
+    // }
+
+    .singer {
+      flex: 1 0 150px;
+      text-overflow: ellipsis;
+      overflow-x: hidden;
+      white-space: nowrap;
+      user-select: none;
+    }
+
+    .singer:hover {
+      cursor: pointer;
+    }
+
+    .duration {
+      user-select: none;
+      flex: 1 0 75px;
+      padding-right: 8px;
+      text-overflow: ellipsis;
+      overflow-x: hidden;
+      white-space: nowrap;
+    }
+  }
+
+  .song-content:nth-of-type(2n + 1) {
+    background-color: #F5F5F5;
+  }
+
+  .song-content:hover {
+    background-color: #F5F5F5;
+  }
+}
+
+.list-container::-webkit-scrollbar {
+  display: none;
+}
+
+.list-container-hide {
+  display: none;
+}
+
+.drawer-content {
+
+  .control-header {
+    height: 50px;
+    display: flex;
+    justify-content: space-between;
+    background-color: rgba(110, 107, 102, 0.8);
+
     .window-control {
       -webkit-app-region: no-drag;
       margin: 15px;
@@ -52,6 +255,7 @@
       width: 100px;
       align-items: center;
       justify-content: space-between;
+
       .minimize {
         width: 20px;
         height: 20px;
@@ -59,6 +263,11 @@
         background-repeat: no-repeat;
         background-size: cover;
       }
+
+      :hover {
+        cursor: pointer;
+      }
+
       .enlarge {
         width: 20px;
         height: 20px;
@@ -66,6 +275,7 @@
         background-repeat: no-repeat;
         background-size: cover;
       }
+
       .close {
         width: 20px;
         height: 20px;
@@ -74,93 +284,93 @@
         background-size: cover;
       }
     }
+
     .window-control::before {
       content: "|";
       color: white;
       font-size: 20px;
     }
   }
-  .content {
-    height: 775px;
-    padding-top: 16px;
-    padding-bottom: 75px;
-    position: relative;
-    background: linear-gradient(120deg, rgba(167, 234, 173, 01), rgba(249, 151, 113, 01), rgba(117, 200, 239, 01), rgba(240, 128, 171, 01), rgba(184, 105, 252, 01));
+
+  @keyframes ablum-rotate {
+    0% {
+      transform: rotate(0deg);
+    }
+
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  .album-container {
+    position: absolute;
+    width: 240px;
+    height: 320px;
+    top: 50%;
+    left: 0%;
+    transform: translate(50%, -50%);
+
+    .pin {
+      width: 89px;
+      height: 17.5px;
+      position: absolute;
+      left: 45%;
+      top: 15%;
+      // transform: translatex(-50%);
+      transform: rotate(66deg);
+      // border: 1px solid red;
+      z-index: 10;
+      background: url("@/assets/images/pin.png") no-repeat center / cover;
+    }
+
+    .album {
+      background: url("@/assets/images/singlecover.png") no-repeat center / cover;
+      width: 200px;
+      height: 200px;
+      position: relative;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+
+      .album-img {
+        width: 128px;
+        height: 128px;
+        position: absolute;
+        top: 37px;
+        left: 36px;
+        margin: auto;
+        border-radius: 50%;
+      }
+      .rotate {
+        animation: ablum-rotate 30s linear infinite;
+      }
+      .pause {
+        animation-play-state: paused;
+      }
+      .running {
+        animation-play-state: running;
+      }
+    }
+  }
+
+  .lyric-drawer-container {
+    width: 360px;
+    height: 520px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    overflow: auto;
+
   }
 }
-.container {
-  ::-webkit-scrollbar {
-    display: none;
-  }
-}
-.list-container {
-  position: absolute;
-  overflow-x: auto;
-  // bottom: 75px;
-  right: 0px;
-  width: 420px;
-  padding: 0 15px;
-  height: calc(100% - 75px);
-  background-color: red;
-  ::-webkit-scrollbar {
-    display: none;
-  }
-}
-.song-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 30px;
-  line-height: 28px;
-  border: 1px solid black;
-  // display: grid;
-  // grid-template: 1fr / 3fr 2fr 1fr;
-  text-overflow: ellipsis;
-  overflow-x: hidden;
-  white-space: nowrap;
-  .song-name {
-    // width: 150px;
-    flex: 1 0 200px;
-    text-overflow: ellipsis;
-    overflow-x: hidden;
-    white-space: nowrap;
-  }
-  .singer {
-    // width: 150px;
-    flex: 1 0 150px;
-    text-overflow: ellipsis;
-    overflow-x: hidden;
-    white-space: nowrap;
-  }
-  .duration {
-    flex: 0 0 75px;
-    text-overflow: ellipsis;
-    overflow-x: hidden;
-    white-space: nowrap;
-  }
-}
-.song-content:hover {
-  cursor: pointer;
-  background-color: yellowgreen;
-}
-.list-container-hide {
-  display: none;
-}
-.drawer {
-  width: 530px;
-  height: calc(100% - 75px);
-  position: absolute;
-  top: 0;
-  right: 0;
-  border: 1px solid black;
-  background-color: #fff;
-  z-index: 1000;
-  animation: drawer-anime 5s ease-in 0s 1 normal;
-}
+
+
 @keyframes drawer-anime {
   0% {
     right: -520px;
   }
+
   100% {
     right: 0px;
   }

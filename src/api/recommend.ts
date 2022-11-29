@@ -8,7 +8,7 @@ async function getPersonalized(num: number = 10): Promise<any> {
     const { data } = await request(`/personalized?limit=${num}`);
     return data;
   } else {
-    return await ipcRenderer.invoke('getPersonalized')
+    return await ipcRenderer.invoke('getPersonalized', num)
   }
   
   // return new Promise((resolve, reject) => {

@@ -43,7 +43,7 @@ const Index = (props: Props) => {
     }));
   };
   return (
-    <div>
+    <div className={style['search-single-song']}>
       {
         songs?.map((item: any, index: number) => {
           const { name, ar, id, dt, al } = item;

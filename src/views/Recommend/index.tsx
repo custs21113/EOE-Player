@@ -11,24 +11,18 @@ type Props = {}
 
 export default function index({ }: Props) {
   const dispatch = useDispatch();
-  const { recommendList } = useSelector((state) => (state as any).ranking, shallowEqual);
+  const { recommendList = [] } = useSelector((state) => (state as any).ranking, shallowEqual);
 
   useEffect(() => {
     const fetchData = async () => {
-      if (recommendList.length > 0) return;
-      const { result } = await getPersonalized(30);
+      // if (recommendList.length > 0) return;
+      const { result } = await getPersonalized(15);
       if (_.isEqual(recommendList, result)) {
         console.log(true)
       } else {
         console.log(false)
         dispatch(initRecommendList(result));
       }
-    }
-    let flag = setInterval(() => {
-      console.log('alive')
-    }, 1000)
-    return () => {
-      clearInterval(flag);
     }
     fetchData();
   }, []);
@@ -40,7 +34,7 @@ export default function index({ }: Props) {
     <div className={style['recommend']}>
       <div className={style['song-list-content']}>
         {
-          recommendList.length > 0 && recommendList.map(({ name, picUrl, playCount, id }: any, index: React.Key) => {
+          recommendList?.map(({ name, picUrl, playCount, id }: any, index: React.Key) => {
             return (
               <div key={index} className={style['song-list']} onClick={() => handleSongListOnClick(id)}>
                 <div>

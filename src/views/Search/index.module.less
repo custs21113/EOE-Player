@@ -1,13 +1,15 @@
 .searchPage {
   width: 980px;
-  margin: 0 auto;
+  min-height: 725px;
+  max-height: 100vh;
+  margin: auto;
   background-color: #05121C;
   color: #fff;
-  margin-top: 50px;
   padding-top: 20px;
   .searchContent {
     width: 720px;
     margin: 0 auto;
+    min-height: calc(100% - 75px);
   }
   .ant-tabs-top > .ant-tabs-nav::before, .ant-tabs-bottom > .ant-tabs-nav::before, .ant-tabs-top > div > .ant-tabs-nav::before, .ant-tabs-bottom > div > .ant-tabs-nav::before {
     border-bottom: none;

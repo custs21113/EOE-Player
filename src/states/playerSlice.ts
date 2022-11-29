@@ -20,8 +20,8 @@ export const initialState: InitialStateProps = {
   loop: 0,
   volume: 30,
   picUrl: "",
-  songName: "",
-  singer: "",
+  songName: "Elf of Era",
+  singer: "EOE",
   dt: 0,
   current: 0,
   id: 0,
@@ -40,7 +40,7 @@ export const getLyricService = createAsyncThunk(
       } = await getLyric(id);
       return lyric;
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 );
@@ -54,9 +54,9 @@ export const playerSlice = createSlice({
       state = {
         loop: 0,
         volume: 30,
-        picUrl: "test",
-        songName: "test",
-        singer: "test",
+        picUrl: "",
+        songName: "Elf of Era",
+        singer: "EOE",
         dt: 0,
         current: 0,
         id: 0,
@@ -82,6 +82,8 @@ export const playerSlice = createSlice({
           index: songList.length,
           songList: [...songList, action.payload]
         };
+        console.log('addSongToPlayList')
+        return state;
       }
       return state;
     },
@@ -194,12 +196,10 @@ export const playerSlice = createSlice({
   },
   // extraReducers: {
   //   [getLyricService.fulfilled.toString()]: (state: InitialStateProps, action: any) => {
-  //       console.log(action)
   //       state.lyric = action?.payload;
   //       return state;
   //   },
   //   [getLyricService.rejected.toString()]: (state: InitialStateProps, action: any) => {
-  //     console.log(action)
   //       state.lyric = ""
   //       return state;
   //   }

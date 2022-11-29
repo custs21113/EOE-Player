@@ -109,5 +109,5 @@ package-lock.json
 yarn-lock.json
 yarn.lock
 
-/dist
+/dist*
 /node_modules

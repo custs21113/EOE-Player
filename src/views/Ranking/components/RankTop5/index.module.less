@@ -22,6 +22,7 @@
       color: #fff;
       .index {
         width: 50px;
+        text-align: center;
         padding: 10px;
       }
       .index:hover {
@@ -32,7 +33,24 @@
         flex-grow: 1;
       }
       .songName:hover {
+        position: relative;
+        pointer-events: none;
+      }
+      .songName:hover::after {
+        content: '';
         cursor: pointer;
+        pointer-events: auto;
+        display: inline-block;
+        position: absolute;
+        width: 16px;
+        height: 16px;
+        margin-left: 8px;
+        line-height: 22px;
+        top: 50%;
+        // left: 50%;
+        transform: translateY(-50%);
+        background: url("@/assets/icons/player-play.svg") no-repeat center / cover;
+        // background: url("@/assets/images/eoe.jpg") no-repeat center/cover;
       }
       .singer {
         text-align: right;

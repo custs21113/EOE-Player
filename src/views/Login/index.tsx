@@ -84,6 +84,11 @@ function index({ }: Props) {
         }}>Info</Button>
         {/* <Skeleton.Image /> */}
         <CountItem />
+
+      </div>
+      <div className="demo">
+         <a href="weixin://">打开微信</a>
+        <span>昵称</span><input type="text" style={{ width: '100px' }}></input>
       </div>
     </div>
   )

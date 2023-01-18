@@ -20,9 +20,9 @@ function createWindow() {
         height: 850,
         resizable: false,
         frame: false,
-        // transparent: true,
+        transparent: true,
         webPreferences: {
-            devTools: true,
+            // devTools: true,
             nodeIntegration: true,
             enablemotemodule: true,
             contextIsolation: false,
@@ -68,7 +68,7 @@ function createWindow() {
 
 
     // 打开开发者工具，默认不打开
-    mainWindow.webContents.openDevTools()
+    // mainWindow.webContents.openDevTools()
     // 关闭window时触发下列事件.
     mainWindow.on('closed', function () {
         mainWindow = null

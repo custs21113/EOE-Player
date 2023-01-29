@@ -4,12 +4,12 @@ import request from "../utils/request";
 // import { ipcRenderer } from '../utils/bridge';
 async function getPersonalized(num: number = 10): Promise<any> {
   // return ipcRenderer.invoke('getPersonalized')
-  if(process.env.NODE_ENV === "development") {
+  // if(process.env.NODE_ENV === "development") {
     const { data } = await request(`/personalized?limit=${num}`);
     return data;
-  } else {
-    return await ipcRenderer.invoke('getPersonalized', num)
-  }
+  // } else {
+  //   return await ipcRenderer.invoke('getPersonalized', num)
+  // }
   
   // return new Promise((resolve, reject) => {
   //   let xhr = new XMLHttpRequest();

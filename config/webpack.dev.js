@@ -9,10 +9,9 @@ module.exports = merge(common, {
   mode: "development",
   stats: "errors-only",
   devtool: "source-map",
-  // target: 'electron-renderer',
   devServer: {
     static: {
-      directory: path.resolve(__dirname, "../dist")
+      directory: path.resolve(__dirname, "../dist/renderer")
     },
     hot: true,
     open: true,
@@ -23,7 +22,6 @@ module.exports = merge(common, {
     new EnvironmentPlugin({
       NODE_ENV: 'development'
     }),
-    new CleanWebpackPlugin(),
     new HTMLWebpackPlugin({
       template: path.resolve(__dirname, "../public/index.html"),
       filename: "index.html",

@@ -7,9 +7,9 @@ const common = require("./webpack.common.js");
 
 module.exports = merge(common, {
   mode: "production",
-  entry: {
-    preload: "./preload.js"
-  },
+  // entry: {
+  //   preload: "./src/preload/preload.ts"
+  // },
   stats: "errors-only",
   devtool: 'source-map',
   target: 'electron-renderer',

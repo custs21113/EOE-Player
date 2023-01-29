@@ -9,7 +9,7 @@ const mainConfig = {
   target: 'electron-main',
   output: {
     filename: 'electron.js',
-    path: path.resolve(__dirname, '../dist'),
+    path: path.resolve(__dirname, '../dist/main'),
   },
   devtool: 'source-map',
   plugins: [

@@ -29,7 +29,7 @@ export const initialState: InitialStateProps = {
   songList: [],
   lyric: "",
 };
-export const getLyricService = createAsyncThunk(
+export const getLyricService:any = createAsyncThunk(
   "player/getLyricService",
   async (id: number) => {
     try {

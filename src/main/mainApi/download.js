@@ -1,22 +1,17 @@
-const path = require("path");
-const fs = require("fs");
-const request = require("request");
-const download = require("download");
+// const path = require("path");
+// const fs = require("fs");
+// const request = require("request");
+// const download = require("download");
+import path from 'path';
+import fs from 'fs';
+import download from 'download';
 
-const { app, BrowserWindow, Menu, MenuItem, Tray, remote } = require('electron')
 module.exports = async function downloadFileToFolder(id, fileName, fileType = 'mp3') {
   //设置保存路径
   let targetFolder = "";
   let err = "";
-  //  = path.join(__dirname, './download');
-  // console.log(targetFolder);
-  // console.log(path.resolve(app.getAppPath(), './download'));
-  // console.log(path.join(targetFolder, `${fileName}.${fileType}`));
-  // console.log(path.join(targetFolder, `./${fileName}.${fileType}`));
-  // console.log(path.resolve(targetFolder, `./${fileName}.${fileType}`));
   try {
     if (process.env.NODE_ENV === 'production') {
-      // targetFolder = path.resolve(app.getAppPath(), '');
       targetFolder = "C:\\Users\\MixJa\\Desktop\\"
     } else {
       targetFolder = path.join(__dirname, './download');

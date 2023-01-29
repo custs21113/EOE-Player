@@ -5,13 +5,13 @@
   "homepage": "./",
   "main": "./dist/electron.js",
   "scripts": {
-    "install:electron": "ELECTRON_MIRROR=https://cdn.npm.taobao.org/dist/electron/ npm install electron",
-    "start": "wait-on npm run webpack serve --config ./config/webpack.dev.js && npm run electron . dev",
-    "react:dev": "cross-env NODE_ENV=development webpack serve --config ./config/webpack.dev.js",
-    "react:build": "cross-env NODE_ENV=production webpack --config ./config/webpack.prod.js",
-    "main:dev": "cross-env NODE_ENV=development webpack --config ./config/webpack.preload.dev.js && webpack --config ./config/webpack.main.dev.js && electron ./dist/electron.js",
-    "main:build": "cross-env NODE_ENV=production webpack --config ./config/webpack.main.prod.js && electron ./dist/electron.js",
-    "build": "cross-env NODE_ENV=production webpack --config ./config/webpack.prod.js && webpack --config ./config/webpack.main.prod.js && electron-builder",
+    "dev:renderer": "webpack serve --config ./config/webpack.dev.js",
+    "dev:main": "concurrently \"webpack serve --config ./config/webpack.dev.js\" \"webpack --config ./config/webpack.preload.dev.js && webpack --config ./build/webpack.main.dev.js && electron ./dist/main/main.js\"",
+    "build:renderer": "webpack --config ./config/webpack.prod.js",
+    "build:main": "webpack --config ./config/webpack.preload.prod.js && webpack --config ./build/webpack.main.prod.js",
+    "build": "webpack --config ./config/webpack.prod.js && webpack --config ./config/webpack.preload.prod.js && webpack --config ./build/webpack.main.prod.js",
+    "": "",
+    
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
     "end": "cross-env NODE_ENV=production webpack --config ./config/webpack.prod.js && webpack --config ./config/webpack.main.prod.js && electron-builder --dir",
@@ -102,7 +102,8 @@
     "webpack": "^5.72.0",
     "webpack-cli": "^4.9.2",
     "webpack-dev-server": "^4.9.0",
-    "webpack-merge": "^5.8.0"
+    "webpack-merge": "^5.8.0",
+    "webpack-node-externals": "^3.0.0"
   },
   "dependencies": {
     "@babel/polyfill": "^7.12.1",
@@ -110,6 +111,7 @@
     "@types/lodash": "^4.14.183",
     "antd": "^4.20.2",
     "axios": "^0.25.0",
+    "download": "^8.0.0",
     "less": "^4.1.3",
     "lodash": "^4.17.21",
     "lyric-parser": "^1.0.1",

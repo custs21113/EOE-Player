@@ -113,7 +113,7 @@ function index(props: Props, audioRef: React.Ref<HTMLAudioElement> | any): JSX.E
             <Slider value={currentTime} min={0} max={Math.round(dt / 1000)} onChange={(value: number) => handleSliderChange(value)}
               onAfterChange={(value: number) => handleSliderChangeEnd(value)}
               step={1}
-              tooltipVisible={false} vertical={false} className={style['slider']}></Slider>
+              tooltip={{ open: false}} vertical={false} className={style['slider']}></Slider>
           </div>
         </div>
         <div className={style['control-container']}>

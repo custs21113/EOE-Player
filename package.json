@@ -6,11 +6,11 @@
   "main": "./dist/electron.js",
   "scripts": {
     "dev:renderer": "webpack serve --config ./config/webpack.dev.js",
-    "dev:main": "concurrently \"webpack serve --config ./config/webpack.dev.js\" \"webpack --config ./config/webpack.preload.dev.js && webpack --config ./build/webpack.main.dev.js && electron ./dist/main/main.js\"",
+    "dev:main": "concurrently \"set RUN_ON_ELECTRON=dev&& webpack serve --config ./config/webpack.dev.js\" \"webpack --config ./config/webpack.preload.dev.js && webpack --config ./build/webpack.main.dev.js && electron ./dist/main/main.js\"",
     "build:renderer": "webpack --config ./config/webpack.prod.js",
     "build:main": "webpack --config ./config/webpack.preload.prod.js && webpack --config ./build/webpack.main.prod.js",
     "build": "webpack --config ./config/webpack.prod.js && webpack --config ./config/webpack.preload.prod.js && webpack --config ./build/webpack.main.prod.js",
-    "": "",
+    "pack:win": "node ./scripts/client/build.js win",
     
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
@@ -23,50 +23,6 @@
   "keywords": [],
   "author": "nougat",
   "license": "ISC",
-  "build": {
-    "appId": "eoe_player",
-    "productName": "eoe_player",
-    "copyright": "Copyright © 2022 ${author}",
-    "files": [
-      "dist/**/*",
-      "package.json",
-      "node_modules/"
-    ],
-    "extraFiles": [
-      {
-        "from": "./public/",
-        "to": "extraFiles/"
-      }
-    ],
-    "extraResources": [
-      {
-        "from": "./public/",
-        "to": "extraResources/"
-      }
-    ],
-    "directories": {
-      "buildResources": "assets",
-      "output": "release"
-    },
-    "win": {
-      "icon": "./public/icon.icns",
-      "requestedExecutionLevel": "highestAvailable",
-      "target": [
-        "nsis"
-      ]
-    },
-    "nsis": {
-      "oneClick": false,
-      "allowElevation": true,
-      "perMachine": true,
-      "warningsAsErrors": false,
-      "allowToChangeInstallationDirectory": true,
-      "createDesktopShortcut": "always",
-      "createStartMenuShortcut": true,
-      "shortcutName": "eoe_player",
-      "include": "./installer.nsh"
-    }
-  },
   "devDependencies": {
     "@babel/cli": "^7.17.10",
     "@babel/core": "^7.18.2",
@@ -121,5 +77,8 @@
     "react-redux": "^8.0.1",
     "react-router-dom": "^6.3.0",
     "redux-thunk": "^2.4.1"
+  },
+  "build": {
+    "extends": "build/electron-build.config.js"
   }
 }

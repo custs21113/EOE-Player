@@ -25,3 +25,51 @@
 // }
 
 //    "build": "concurrently \"webpack --config ./config/webpack.prod.js\" \"webpack --config ./config/webpack.preload.prod.js\" \"webpack --config ./build/webpack.main.prod.js\"",
+
+
+
+
+// "build": {
+//   "appId": "eoe_player",
+//   "productName": "eoe_player",
+//   "copyright": "Copyright © 2022 ${author}",
+//   "files": [
+//     "dist/**/*",
+//     "package.json",
+//     "node_modules/"
+//   ],
+//   "extraFiles": [
+//     {
+//       "from": "./public/",
+//       "to": "extraFiles/"
+//     }
+//   ],
+//   "extraResources": [
+//     {
+//       "from": "./public/",
+//       "to": "extraResources/"
+//     }
+//   ],
+//   "directories": {
+//     "buildResources": "assets",
+//     "output": "release"
+//   },
+//   "win": {
+//     "icon": "./public/icon.icns",
+//     "requestedExecutionLevel": "highestAvailable",
+//     "target": [
+//       "nsis"
+//     ]
+//   },
+//   "nsis": {
+//     "oneClick": false,
+//     "allowElevation": true,
+//     "perMachine": true,
+//     "warningsAsErrors": false,
+//     "allowToChangeInstallationDirectory": true,
+//     "createDesktopShortcut": "always",
+//     "createStartMenuShortcut": true,
+//     "shortcutName": "eoe_player",
+//     "include": "./installer.nsh"
+//   }
+// },

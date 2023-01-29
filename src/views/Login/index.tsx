@@ -6,6 +6,7 @@ import { useLocation } from 'react-router-dom';
 import { account } from '../../api/user';
 import { Button, Modal, Skeleton } from 'antd';
 import CountItem from './components/CountItem';
+import { ipcRenderer } from '../../utils/bridge';
 type Props = {}
 const info = () => {
   Modal.info({
@@ -62,7 +63,7 @@ function index({ }: Props) {
     }
   }
   useEffect(() => {
-    initQrCode();
+    // initQrCode();
   }, []);
   const handleAccount = async () => {
     const result = await account();
@@ -74,6 +75,10 @@ function index({ }: Props) {
   const handlePassword = (e: any) => {
     updatePassword(e.target.value)
   }
+  
+  function hotupdate() {
+    ipcRenderer?.send('hotupdate', 'http://localhost:3000/hotupdate');
+  }
   return (
     <div className={style.loginPage}>
       <img ref={imgRef} />
@@ -84,7 +89,7 @@ function index({ }: Props) {
         }}>Info</Button>
         {/* <Skeleton.Image /> */}
         <CountItem />
-
+        <Button onClick={hotupdate}>Click</Button>
       </div>
       <div className="demo">
          <a href="weixin://">打开微信</a>

@@ -14,7 +14,7 @@ module.exports = merge(common, {
       directory: path.resolve(__dirname, "../dist/renderer")
     },
     hot: true,
-    open: true,
+    open: process.env.RUN_ON_ELECTRON === 'dev' ? false : true,
     port: 3001,
     historyApiFallback: true,
   },

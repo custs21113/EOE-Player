@@ -14,16 +14,15 @@ function createWindow() {
         width: 980,
         height: 850,
         resizable: false,
-        // frame: false,
-        // transparent: true,
+        frame: false,
+        transparent: true,
         webPreferences: {
+            devTools: true,
             nodeIntegration: true,
             contextIsolation: false,
             preload: path.join(__dirname, '../renderer/preload.js')
         }
     });
-    console.log(path.join(__dirname))
-    console.log(process.cwd());
     try {
         if (process.env.NODE_ENV === 'production') {
             tray = new Tray(path.join(app.getPath('exe'), '../icon.png'));
@@ -51,7 +50,8 @@ function createWindow() {
         mainWindow.loadFile(path.join(__dirname, '../renderer/index.html'))
     }
 
-
+    
+    mainWindow.webContents.openDevTools()
     mainWindow.on('closed', function () {
         mainWindow = null
     })

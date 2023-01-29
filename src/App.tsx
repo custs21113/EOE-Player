@@ -41,7 +41,9 @@ export default function App({ }: Props) {
   function close() {
     ipcRenderer?.send('window-close');
   }
-
+  function hotupdate() {
+    ipcRenderer?.send('hotupdate');
+  }
   useEffect(() => {
     const initPlayer = async () => {
       if (audioRef.current && id) {
@@ -154,7 +156,7 @@ export default function App({ }: Props) {
             <NavLink to="recommend" >推荐</NavLink >
             <NavLink to="ranking" >排行</NavLink >
             <NavLink to="search" >搜索</NavLink >
-            {/* <NavLink to="login" >登录</NavLink > */}
+            <NavLink to="login" >登录</NavLink >
           </div>
           <div className={style['window-control']}>
             <div className={style['minimize']} onClick={minimize}></div>
@@ -166,7 +168,7 @@ export default function App({ }: Props) {
           placement={"right"}
           closable={false}
           // onClose={onDrawerClose}
-          visible={drawerVisible}
+          open={drawerVisible}
           getContainer={false}
           width={420}
           mask={false}
@@ -222,11 +224,12 @@ export default function App({ }: Props) {
             onClose={() => {
               updateSongDrawerVisible(!songDrawerVisible)
             }}
-            visible={songDrawerVisible}
+            open={songDrawerVisible}
             getContainer={false}
             mask={false}
             height={"775px"}
-            style={{ position: 'absolute', height: songDrawerVisible ? "775px" : "0px", marginBottom: "75px", zIndex: songDrawerVisible ? 101 : -1, display: songDrawerVisible ? "block" : "none" }}
+
+            style={{ position: 'absolute', width: '100vw', marginTop: '-50px', height: songDrawerVisible ? "775px" : "0px", marginBottom: "75px", zIndex: songDrawerVisible ? 101 : -1, display: songDrawerVisible ? "block" : "none" }}
           >
             <div className={style['drawer-content']}>
               <div className={style['control-header']}>
@@ -240,7 +243,10 @@ export default function App({ }: Props) {
               <div className={style['album-container']}>
                 <div className={style['pin']}></div>
                 <div className={style['album']}>
-                  <img className={isPlaying ? [style['album-img'], style['rotate'], style['running']].join(' ') : [style['album-img'], style['rotate'], style['pause']].join(' ')} ref={ablumRef} src={picUrl === "" ? eoe : picUrl} width={128} height={128} alt="" />
+                  <img className={isPlaying ?
+                    [style['album-img'], style['rotate'], style['running']].join(' ') :
+                    [style['album-img'], style['rotate'], style['pause']].join(' ')}
+                    ref={ablumRef} src={picUrl === "" ? eoe : picUrl} width={128} height={128} alt="" />
                 </div>
               </div>
               <div ref={scrollRef} className={style["lyric-drawer-container"]} >

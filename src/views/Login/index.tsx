@@ -79,6 +79,9 @@ function index({ }: Props) {
   function hotupdate() {
     ipcRenderer?.send('hotupdate', 'http://localhost:3000/hotupdate');
   }
+  function reload() {
+    ipcRenderer?.send('reload');
+  }
   return (
     <div className={style.loginPage}>
       <img ref={imgRef} />
@@ -89,7 +92,8 @@ function index({ }: Props) {
         }}>Info</Button>
         {/* <Skeleton.Image /> */}
         <CountItem />
-        <Button onClick={hotupdate}>Click</Button>
+        <Button onClick={hotupdate}>hotupdate</Button>
+        <Button onClick={reload}>reload</Button>
       </div>
       <div className="demo">
          <a href="weixin://">打开微信</a>

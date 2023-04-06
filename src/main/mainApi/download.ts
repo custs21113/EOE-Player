@@ -6,10 +6,10 @@ import path from 'path';
 import fs from 'fs';
 import download from 'download';
 
-module.exports = async function downloadFileToFolder(id, fileName, fileType = 'mp3') {
+export default async function downloadFileToFolder(id, fileName, fileType = 'mp3') {
   //设置保存路径
   let targetFolder = "";
-  let err = "";
+  let err;
   try {
     if (process.env.NODE_ENV === 'production') {
       targetFolder = "C:\\Users\\MixJa\\Desktop\\"
@@ -17,7 +17,7 @@ module.exports = async function downloadFileToFolder(id, fileName, fileType = 'm
       targetFolder = path.join(__dirname, './download');
     }
     if (!fs.existsSync(targetFolder)) {
-      err = await fs.mkdir(targetFolder, { recursive: true });
+      err = fs.mkdir(targetFolder, { recursive: true } as any);
     }
     let url = `https://music.163.com/song/media/outer/url?id=${id}.mp3`;
     let data = download(url);

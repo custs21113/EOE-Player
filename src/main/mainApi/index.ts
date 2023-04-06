@@ -2,8 +2,9 @@ import { ipcMain, app } from 'electron';
 import http from 'http'
 import fs from 'fs';
 import path from 'path';
+import { BrowserWindow } from 'electron/main';
 
-export default function (mainWindow) {
+export default function (mainWindow: BrowserWindow) {
     ipcMain.on('window-minimize', function () {
         mainWindow.minimize();
     })
@@ -14,9 +15,11 @@ export default function (mainWindow) {
     ipcMain.on('window-close', function () {
         mainWindow.close();
     })
-    ipcMain.on('hotupdate', function(e, url) {
-        console.log({url});
+    ipcMain.on('hotupdate', function(e, url: string) {
         const dest = path.resolve(app.getAppPath(), `../download/eoe_player-1.0.0.win32.exe`);
+        if(!fs.existsSync(path.dirname(dest))) {
+            fs.mkdirSync(path.dirname(dest))
+        }
         const stream = fs.createWriteStream(dest);
         http.get(url, (res) => {
             res.on('data', function(chunk) {
@@ -25,5 +28,8 @@ export default function (mainWindow) {
                 stream.end();
             })
         })
+    })
+    ipcMain.on('reload', function() {
+        mainWindow.loadFile(path.join(__dirname, '../newRenderer/index.html'))
     })
 }

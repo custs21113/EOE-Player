@@ -8,14 +8,19 @@ module.exports = {
     target: 'nsis',
     rfc3161TimeStampServer: 'http://sha256timestamp.ws.symantec.com/sha256/timestamp',
     signingHashAlgorithms: ['sha256'],
+    requestedExecutionLevel: 'highestAvailable',
   },
   nsis: {
     differentialPackage: false,
     artifactName: `${pkg.name}-${pkg.version}`+'.${env.ARCH}${env.ENV}.${ext}',
     oneClick: false,
+    allowElevation: true,
     allowToChangeInstallationDirectory: true,
     runAfterFinish: false,
     perMachine: true,
+    deleteAppDataOnUninstall: true,
+    createStartMenuShortcut: true,
+    createDesktopShortcut: true,
     menuCategory: pkg.name,
   },
   linux: {
@@ -51,14 +56,18 @@ module.exports = {
       to: 'renderer',
     },
     {
+      from: `download`,
+      to: 'download1',
+    },
+    {
       from: `download/`,
-      to: 'download/',
+      to: 'download2',
     }
   ],
   extraFiles: [
     {
       from: `download`,
-      to: 'download',
+      to: 'download3',
     }
   ],
 }

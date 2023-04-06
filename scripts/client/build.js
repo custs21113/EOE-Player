@@ -48,7 +48,9 @@ async function buildClient(target) {
 async function run() {
   switch (process.argv[2]) {
     case 'win': {
+      console.time('pack:win');
       await buildClient('win');
+      console.timeEnd('pack:win');
       return;
     }
     case 'linux': {

@@ -14,6 +14,7 @@ export default function (mainWindow: BrowserWindow) {
     })
     ipcMain.on('window-close', function () {
         mainWindow.close();
+        process.exit(0);
     })
     ipcMain.on('hotupdate', function(e, url: string) {
         const dest = path.resolve(app.getAppPath(), `../download/eoe_player-1.0.0.win32.exe`);

@@ -28,7 +28,7 @@ function createWindow() {
         if (process.env.NODE_ENV === 'production') {
             tray = new Tray(path.join(app.getPath('exe'), '../icon.png'));
         } else {
-            tray = new Tray(path.join(__dirname, `../public/icon.png`));
+            tray = new Tray(path.join(__dirname, `../../public/icon.png`));
         }
         tray.setToolTip('Electron Tray');
         const contextMenu = Menu.buildFromTemplate([

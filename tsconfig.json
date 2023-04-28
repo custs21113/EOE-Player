@@ -39,7 +39,6 @@
     "forceConsistentCasingInFileNames": true,
     "strictPropertyInitialization": false,
     "noImplicitReturns": false,
-    "suppressImplicitAnyIndexErrors": true,
     "noUnusedLocals": false,
     "resolveJsonModule": true,
     "experimentalDecorators": true,

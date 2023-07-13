@@ -4,7 +4,7 @@ import App from './App';
 import "./index.module.less";
 import { BrowserRouter, Router, HashRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import store from '@/states/store.ts';
+import store from '@/states/store';
 export default function Index(props: {}) {
 
   return (

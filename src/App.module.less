@@ -30,7 +30,7 @@
       justify-content: space-between;
       background-color: #05121c;
       // z-index: 1000;
-      border-bottom: 1px solid rgba(245, 222, 179, 0.2);
+      // border-bottom: 1px solid rgba(245, 222, 179, 0.2);
       -webkit-app-region: drag;
       background: linear-gradient(45deg, #05121c, #021524);
       position: sticky;
@@ -50,6 +50,10 @@
         display: flex;
         justify-content: space-around;
         align-items: center;
+        a {
+          color: #acacac;
+          text-decoration: none;
+        }
       }
 
       .window-control {
@@ -341,12 +345,15 @@
         margin: auto;
         border-radius: 50%;
       }
+
       .rotate {
         animation: ablum-rotate 30s linear infinite;
       }
+
       .pause {
         animation-play-state: paused;
       }
+
       .running {
         animation-play-state: running;
       }
